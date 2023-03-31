@@ -14,12 +14,25 @@ namespace DWPennyFinder.Services
         {
             items = new List<Item>()
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
+                new Item { Id = Guid.NewGuid().ToString(),
+                    Name = "Bambi & Thumper (100)",
+                    Park = "Animal Kingdom",
+                    Location = "Chester Hester",
+                    Latitude = 28.35674277,
+                    Longitude = -81.58792237
+                },
+                new Item { Id = Guid.NewGuid().ToString(),
+                    Name = "Baloo (100)",
+                    Park = "Animal Kingdom",
+                    Location = "Curiosity Animal Tours #1",
+                    Latitude = 28.35983381,
+                    Longitude = -81.59219057
+                },
+                //new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
+                //new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
+                //new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
+                //new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
+                //new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
             };
         }
 

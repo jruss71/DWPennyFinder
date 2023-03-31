@@ -14,7 +14,14 @@ namespace DWPennyFinder.ViewModels
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
+        //public string Id { get; set; }
+        //public string Name { get; set; }
+        //public string Park { get; set; }
+        //public string Location { get; set; }
+        //public double Latitude { get; set; }
+        //public double Longitude { get; set; }
         bool isBusy = false;
+
         public bool IsBusy
         {
             get { return isBusy; }
