@@ -10,20 +10,26 @@ namespace DWPennyFinder.ViewModels
     public class ItemDetailViewModel : BaseViewModel
     {
         private string itemId;
-        private string text;
-        private string description;
+        private string name;
+        private string location;
+        private string park;
         public string Id { get; set; }
 
-        public string Text
+        public string Name
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => name;
+            set => SetProperty(ref name, value);
         }
 
-        public string Description
+        public string Location
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get => location;
+            set => SetProperty(ref location, value);
+        }
+        public string Park
+        {
+            get => park;
+            set => SetProperty(ref park, value);
         }
 
         public string ItemId
@@ -45,8 +51,9 @@ namespace DWPennyFinder.ViewModels
             {
                 var item = await DataStore.GetItemAsync(itemId);
                 Id = item.Id;
-                Text = item.Name;
-                Description = item.Park;
+                Name = item.Name;
+                Location = item.Location;
+                Park = item.Park;
             }
             catch (Exception)
             {

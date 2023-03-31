@@ -28,7 +28,7 @@ namespace DWPennyFinder.ViewModels
 
         public ItemsViewModel()
         {
-            Title = "Browse";
+            Title = "Browse 100th Pennies";
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 

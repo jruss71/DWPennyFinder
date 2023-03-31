@@ -9,8 +9,9 @@ namespace DWPennyFinder.ViewModels
 {
     public class NewItemViewModel : BaseViewModel
     {
-        private string text;
-        private string description;
+        private string name;
+        private string park;
+        private string location;
 
         public NewItemViewModel()
         {
@@ -22,20 +23,25 @@ namespace DWPennyFinder.ViewModels
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(text)
-                && !String.IsNullOrWhiteSpace(description);
+            return !String.IsNullOrWhiteSpace(name)
+                && !String.IsNullOrWhiteSpace(park) && !String.IsNullOrWhiteSpace(location);
         }
 
-        public string Text
+        public string Name
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => name;
+            set => SetProperty(ref name, value);
+        }
+        public string Park
+        {
+            get => park;
+            set => SetProperty(ref park, value);
         }
 
-        public string Description
+        public string Location
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get => location;
+            set => SetProperty(ref location, value);
         }
 
         public Command SaveCommand { get; }
@@ -52,8 +58,9 @@ namespace DWPennyFinder.ViewModels
             Item newItem = new Item()
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = Text,
-                Park = Description
+                Name = Name,
+                Park = Park,
+                Location = Location
             };
             
             await DataStore.AddItemAsync(newItem);
