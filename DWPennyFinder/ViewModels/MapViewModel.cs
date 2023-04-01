@@ -7,14 +7,30 @@ using Xamarin.Forms;
 namespace DWPennyFinder.ViewModels
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
-    public class ItemDetailViewModel : BaseViewModel
-    {
+    public class MapViewModel : BaseViewModel
+	{
+
+        public MapViewModel()
+        {
+            Title = "Map";
+        }
+
+        
+
+        private async void LoadItem(string itemId)
+        {
+            Item Item = await DataStore.GetItemAsync(itemId);
+        }
+
+
         private string itemId;
         private string name;
         private string location;
         private string park;
         private double latitude;
         private double longitude;
+        public Item item { get; }
+
         public string Id { get; set; }
 
         public string Name
@@ -56,8 +72,19 @@ namespace DWPennyFinder.ViewModels
                 itemId = value;
                 LoadItemId(value);
             }
-        }        
+        }
 
+        //public async Task LoadItem(string itemId)
+        //{
+        //    try
+        //    {
+        //        item = await DataStore.GetItemAsync(itemId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Failed to load item with ID {itemId}: {ex}");
+        //    }
+        //}
         public async void LoadItemId(string itemId)
         {
             try
@@ -75,6 +102,8 @@ namespace DWPennyFinder.ViewModels
                 Debug.WriteLine("Failed to Load Item");
             }
         }
+
+
     }
 }
 

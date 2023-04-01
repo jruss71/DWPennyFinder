@@ -4,6 +4,7 @@ using Xamarin.Forms.Xaml;
 using DWPennyFinder.Services;
 using DWPennyFinder.Views;
 
+
 namespace DWPennyFinder
 {
     public partial class App : Application
@@ -14,7 +15,7 @@ namespace DWPennyFinder
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();
+            MainPage = new NavigationPage(new AppShell());
         }
 
         protected override void OnStart ()

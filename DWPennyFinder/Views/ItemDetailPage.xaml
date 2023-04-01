@@ -6,9 +6,9 @@
 
     <StackLayout Spacing="20" Padding="15">
         <Label Text="Name:" FontSize="Medium" />
-        <Label Text="{Binding Name}" FontSize="Small"/>
+        <Label Text="{Binding Name}" FontSize="Small" FontAttributes="Bold"/>
         <Label Text="Park:" FontSize="Medium" />
-        <Label Text="{Binding Park}" FontSize="Small"/>
+        <Label Text="{Binding Park}" FontSize="Large"/>
          <Label Text="Location:" FontSize="Medium" />
         <Label Text="{Binding Location}" FontSize="Small"/>
     </StackLayout>

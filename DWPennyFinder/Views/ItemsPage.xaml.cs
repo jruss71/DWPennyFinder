@@ -15,8 +15,9 @@ namespace DWPennyFinder.Views
         public ItemsPage()
         {
             InitializeComponent();
-
-            BindingContext = _viewModel = new ItemsViewModel();
+            _viewModel = new ItemsViewModel();
+            _viewModel.Navigation = Navigation;
+            BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
         }
 
@@ -24,6 +25,7 @@ namespace DWPennyFinder.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
+
         }
 
     }
