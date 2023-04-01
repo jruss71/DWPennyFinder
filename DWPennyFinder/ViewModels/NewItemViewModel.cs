@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using DWPennyFinder.Models;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace DWPennyFinder.ViewModels
@@ -12,12 +13,16 @@ namespace DWPennyFinder.ViewModels
         private string name;
         private string park;
         private string location;
+        private double latitude;
+        private double longitude;
+
+        public INavigation Navigation { get; set; }
 
         public NewItemViewModel()
         {
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
-            this.PropertyChanged += 
+            this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
         }
 
@@ -44,30 +49,50 @@ namespace DWPennyFinder.ViewModels
             set => SetProperty(ref location, value);
         }
 
+        public double Latitude
+        {
+            get => latitude;
+            set => SetProperty(ref latitude, value);
+        }
+        public double Longitude
+        {
+            get => longitude;
+            set => SetProperty(ref longitude, value);
+        }
+
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
 
         private async void OnCancel()
         {
             // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            await Navigation.PopModalAsync();
         }
 
         private async void OnSave()
         {
-            Item newItem = new Item()
+            var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            if (status == PermissionStatus.Granted)
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = Name,
-                Park = Park,
-                Location = Location
-            };
-            
-            await DataStore.AddItemAsync(newItem);
+                var location = await Geolocation.GetLocationAsync();
+                var latitude = location.Latitude;
+                var longitude = location.Longitude;
 
-            // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+                Item newItem = new Item()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = Name,
+                    Park = Park,
+                    Location = Location,
+                    Latitude = latitude,
+                    Longitude = longitude
+                };
+
+                await DataStore.AddItemAsync(newItem);
+
+                // This will pop the current page off the navigation stack
+                await Navigation.PopModalAsync();
+            }
         }
     }
 }
-

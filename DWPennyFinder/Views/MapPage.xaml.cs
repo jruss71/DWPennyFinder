@@ -17,7 +17,6 @@ namespace DWPennyFinder.Views
         public MapPage()
         {
             InitializeComponent();
-            //BindingContext = new MapViewModel();
             Item item = null;
             
             // Get the itemId from the query string parameters
@@ -27,55 +26,6 @@ namespace DWPennyFinder.Views
             }
         }
 
-
-        //Position position = new Position(36.9628066, -122.0194722);
-        //MapSpan mapSpan = new MapSpan(position, 0.01, 0.01);
-
-        //Map map = new Map(mapSpan);
-
-        //Pin pin = new Pin
-        //{
-        //    Label = "Santa Cruz",
-        //    Address = "The city with a boardwalk",
-        //    Type = PinType.Place,
-        //    Position = position
-        //};
-        //map.Pins.Add(pin);
-
-        //Content = new StackLayout
-        //{
-        //    Children = { map }
-        //};
-        //}s
-
-        //public MapPage(string itemId, string name, string park, string location, double latitude, double longitude)
-        //{
-        //    InitializeComponent();
-
-        //    // Create a Pin for the location
-        //    var position = new Position(latitude, longitude);
-        //    var pin = new Pin
-        //    {
-        //        Label = name + park,
-        //        Type = PinType.Place,
-        //        Position = position
-        //    };
-
-        //    // Create a Map with the Pin centered on the location
-        //    var mapSpan = MapSpan.FromCenterAndRadius(position, Distance.FromMiles(1));
-        //    var map = new Map(mapSpan)
-        //    {
-        //        IsShowingUser = true,
-        //        VerticalOptions = LayoutOptions.FillAndExpand,
-        //        HorizontalOptions = LayoutOptions.FillAndExpand
-        //    };
-        //    map.Pins.Add(pin);
-
-        //    Content = new StackLayout
-        //    {
-        //        Children = { map }
-        //    };
-        //}
 
         protected override void OnAppearing()
         {

@@ -80,7 +80,7 @@ namespace DWPennyFinder.ViewModels
 
         private async void OnAddItem(object obj)
         {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
+            await Navigation.PushAsync(new NewItemPage());
         }
 
         async void OnItemSelected(Item item)
@@ -88,23 +88,11 @@ namespace DWPennyFinder.ViewModels
             if (item == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            //await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
-            // This will push the MapViewPage onto the navigation stack
-            //await Shell.Current.GoToAsync($"{nameof(MapPage)}?{nameof(MapViewModel.Park)}={item.Park}");
-            //await Shell.Current.GoToAsync($"{nameof(MapPage)}?{nameof(MapViewModel.Latitude)}={item.Latitude}&{nameof(MapViewModel.Longitude)}={item.Longitude}&{nameof(MapViewModel.Name)}={item.Name}");
-            // await Shell.Current.GoToAsync(nameof(MapPage));
-
+          
             var mapPage = new MapPage();
             mapPage.BindingContext = item;
             await Navigation.PushAsync(mapPage);
-            // await Shell.Current.GoToAsync($"{nameof(MapPage)}?ItemId={item.Id}");
-            // await Shell.Current.GoToAsync($"{nameof(MapPage)}?{nameof(MapViewModel.ItemId)}={item.Id}");
-            // Navigate to the MapPage with a pin showing the location of the item
-            //await Shell.Current.GoToAsync($"{nameof(MapPage)}?{nameof(MapViewModel.ItemId)}={item.Id}&{nameof(MapViewModel.Park)}={item.Park}&{nameof(MapViewModel.Name)}={item.Name}&{nameof(MapViewModel.Location)}={item.Location}&{nameof(MapViewModel.Latitude)}={item.Latitude}&{nameof(MapViewModel.Longitude)}={item.Longitude}");
-            // Navigate to the MapPage with a pin showing the location of the item
-            //await Shell.Current.GoToAsync($"{nameof(MapPage)}?{nameof(MapViewModel.ItemId)}={item.Id}&{nameof(MapViewModel.Name)}={item.Name}&{nameof(MapViewModel.Park)}={item.Park}&{nameof(MapViewModel.Location)}={item.Location}&{nameof(MapViewModel.Latitude)}={item.Latitude}&{nameof(MapViewModel.Longitude)}={item.Longitude}");
-
+          
         }
     }
 }

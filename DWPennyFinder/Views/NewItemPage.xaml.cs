@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DWPennyFinder.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-using DWPennyFinder.Models;
-using DWPennyFinder.ViewModels;
-
 namespace DWPennyFinder.Views
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewItemPage : ContentPage
     {
-        public Item Item { get; set; }
+        NewItemViewModel _viewModel;
 
         public NewItemPage()
         {
             InitializeComponent();
-            BindingContext = new NewItemViewModel();
+
+            _viewModel = new NewItemViewModel();
+            _viewModel.Navigation = Navigation;
+            BindingContext = _viewModel;
         }
     }
 }
