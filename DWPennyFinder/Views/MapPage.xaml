@@ -8,9 +8,23 @@
              Title="{Binding Title}">
 
     <StackLayout Margin="10">
-        <maps:Map x:Name="map">
-           
-        </maps:Map>
-    </StackLayout>
+        <maps:Map x:Name="map"/>
+
+            <Slider x:Name= "slider" Margin="20,0,20,0"
+            Maximum="20"
+            Minimum="10"
+            ValueChanged="OnSliderValueChanged"/>
+    <Grid VerticalOptions="End">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Text="Street" Clicked="OnButtonClicked" />
+        <Button Grid.Column="1" Text="Satellite" Clicked="OnButtonClicked" />
+        <Button Grid.Column="2" Text="Hybrid" Clicked="OnButtonClicked" />
+    </Grid>
+</StackLayout>
+
 
 </ContentPage>
