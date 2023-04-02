@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 using DWPennyFinder.Models;
 using DWPennyFinder.Views;
-using Xamarin.Forms.Maps;
+using System;
+using System.Diagnostics;
 
 namespace DWPennyFinder.ViewModels
 {
@@ -14,9 +14,9 @@ namespace DWPennyFinder.ViewModels
         private Item _selectedItem;
 
         public ObservableCollection<Item> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get;  }
-        public Command<Item> ItemTapped { get; }
+        public ICommand LoadItemsCommand { get; }
+        public ICommand AddItemCommand { get; }
+        public ICommand ItemTapped { get; }
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -37,7 +37,7 @@ namespace DWPennyFinder.ViewModels
             AddItemCommand = new Command(OnAddItem);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        public async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
 
@@ -86,11 +86,11 @@ namespace DWPennyFinder.ViewModels
             if (item == null)
                 return;
 
-          
+
             var mapPage = new MapPage();
             mapPage.BindingContext = item;
             await Navigation.PushAsync(mapPage);
-          
+
         }
     }
 }

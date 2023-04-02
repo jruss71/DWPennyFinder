@@ -13,5 +13,6 @@ namespace DWPennyFinder.Models
         public string Location { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public bool HaveItem { get; internal set; }
     }
 }

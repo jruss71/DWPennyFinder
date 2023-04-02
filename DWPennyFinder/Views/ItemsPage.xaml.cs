@@ -6,6 +6,7 @@ using DWPennyFinder.Models;
 using DWPennyFinder.Views;
 using System.Globalization;
 using DWPennyFinder.Converters;
+using System.Threading.Tasks;
 
 namespace DWPennyFinder.Views
 {
@@ -19,6 +20,8 @@ namespace DWPennyFinder.Views
             _viewModel.Navigation = Navigation;
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
+
+            LoadItems();
         }
 
         protected override void OnAppearing()
@@ -28,10 +31,15 @@ namespace DWPennyFinder.Views
 
         }
 
+        private async Task LoadItems()
+        {
+            await _viewModel.ExecuteLoadItemsCommand();
+        }
     }
 
     
 }
+
 namespace DWPennyFinder.Converters
 {
     public class LocationParkConverter : IMultiValueConverter
