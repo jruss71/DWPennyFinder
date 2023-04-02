@@ -19,7 +19,7 @@ namespace DWPennyFinder.ViewModels
 
         private async void LoadItem(string itemId)
         {
-            Item Item = await DataStore.GetItemAsync(itemId);
+           // Item Item = await DataStore.GetItemAsync(itemId);
         }
 
 
@@ -89,8 +89,8 @@ namespace DWPennyFinder.ViewModels
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
+               // var item = await DataStore.GetItemAsync(itemId);
+                ItemId = item.itemId;
                 Name = item.Name;
                 Location = item.Location;
                 Park = item.Park;

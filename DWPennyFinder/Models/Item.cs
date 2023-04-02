@@ -1,10 +1,13 @@
 ﻿using System;
+using SQLite;
 
 namespace DWPennyFinder.Models
 {
     public class Item
     {
-        public string Id { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public string itemId { get; set; }
         public string Name { get; set; }
         public string Park { get; set; }
         public string Location { get; set; }

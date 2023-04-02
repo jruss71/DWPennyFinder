@@ -144,6 +144,9 @@
     <PackageReference Include="Xamarin.Forms.Maps">
       <Version>5.0.0.2578</Version>
     </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.8.116</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -151,5 +154,8 @@
       <Project>{C2ADE2CE-F979-4B68-B34F-A6D66EF1F409}</Project>
       <Name>DWPennyFinder</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Database\" />
   </ItemGroup>
 </Project>

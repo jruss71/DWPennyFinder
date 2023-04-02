@@ -62,13 +62,13 @@ namespace DWPennyFinder.ViewModels
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Name = item.Name;
-                Location = item.Location;
-                Park = item.Park;
-                Latitude = item.Latitude;
-                Longitude = item.Longitude;
+                //var item = await DataStore.GetItemAsync(itemId);
+                //ItemId = item.itemId;
+                //Name = item.Name;
+                //Location = item.Location;
+                //Park = item.Park;
+                //Latitude = item.Latitude;
+                //Longitude = item.Longitude;
             }
             catch (Exception)
             {

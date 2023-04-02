@@ -7,7 +7,7 @@ using Xamarin.Forms.Maps;
 using DWPennyFinder.ViewModels;
 using Map = Xamarin.Forms.Maps.Map;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
-using DWPennyFinder.Services;
+//using DWPennyFinder.Services;
 
 namespace DWPennyFinder.Views
 {	

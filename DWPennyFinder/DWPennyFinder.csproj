@@ -8,14 +8,20 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />  
     <PackageReference Include="Xamarin.Forms.GoogleMaps" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="7.0.59" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
     <PackageReference Include="Xamarin.Forms.Maps" Version="5.0.0.2578" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Data\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Maui.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 </Project>

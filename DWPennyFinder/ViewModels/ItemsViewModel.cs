@@ -12,7 +12,6 @@ namespace DWPennyFinder.ViewModels
     public class ItemsViewModel : BaseViewModel
     {
         private Item _selectedItem;
-        private Position _pinposition;
 
         public ObservableCollection<Item> Items { get; }
         public Command LoadItemsCommand { get; }
@@ -26,7 +25,6 @@ namespace DWPennyFinder.ViewModels
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public INavigation Navigation { get; set; }
-        public Position PinPosition => _pinposition;
 
         public ItemsViewModel()
         {
@@ -46,7 +44,7 @@ namespace DWPennyFinder.ViewModels
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await App.Database.GetItemsAsync();
                 foreach (var item in items)
                 {
                     Items.Add(item);

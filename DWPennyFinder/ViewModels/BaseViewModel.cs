@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
 using Xamarin.Forms;
-
 using DWPennyFinder.Models;
-using DWPennyFinder.Services;
+//using DWPennyFinder.Services;
 
 namespace DWPennyFinder.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+       // public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
         //public string Id { get; set; }
         //public string Name { get; set; }

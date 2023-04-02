@@ -75,24 +75,22 @@ namespace DWPennyFinder.ViewModels
             if (status == PermissionStatus.Granted)
             {
                 var location = await Geolocation.GetLocationAsync();
-                var latitude = location.Latitude;
-                var longitude = location.Longitude;
-
-                Item newItem = new Item()
+                var newItem = new Item()
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    itemId = Guid.NewGuid().ToString(),
                     Name = Name,
                     Park = Park,
                     Location = Location,
-                    Latitude = latitude,
-                    Longitude = longitude
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude
                 };
 
-                await DataStore.AddItemAsync(newItem);
+                await App.Database.SaveItemAsync(newItem);
 
                 // This will pop the current page off the navigation stack
                 await Navigation.PopModalAsync();
             }
         }
+
     }
 }
