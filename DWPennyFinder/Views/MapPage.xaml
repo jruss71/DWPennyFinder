@@ -4,12 +4,16 @@
              x:Class="DWPennyFinder.Views.MapPage"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:viewmodels="clr-namespace:DWPennyFinder.ViewModels"
+             xmlns:local="clr-namespace:DWPennyFinder;assembly=DWPennyFinder"
              x:DataType="viewmodels:ItemsViewModel"
              Title="{Binding Title}">
 
-    <StackLayout Margin="10">
-        <maps:Map x:Name="map"/>
+          
 
+    <StackLayout Margin="10">
+        
+        <local:CustomMap x:Name="customMap"
+                     MapType="Street" />
             <Slider x:Name= "slider" Margin="20,0,20,0"
             Maximum="20"
             Minimum="10"

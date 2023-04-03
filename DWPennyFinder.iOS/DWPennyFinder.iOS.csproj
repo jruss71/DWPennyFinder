@@ -71,6 +71,8 @@
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Database\item.db3" />
+    <Compile Include="CustomMKAnnotationView.cs" />
+    <Compile Include="CustomMapRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json">
@@ -125,6 +127,10 @@
     <BundleResource Include="Resources\xamarin_logo%402x.png" />
     <BundleResource Include="Resources\xamarin_logo%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
+    <BundleResource Include="Resources\icon_wp_map.png" />
+    <BundleResource Include="Resources\icon_wp_map3x.png" />
+    <BundleResource Include="Resources\pin.png" />
+    <BundleResource Include="Resources\monkey.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

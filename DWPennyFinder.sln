@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32B1AB12-5D2D-4AB4-99D5-CC115C0D95C5}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		DWPennyFinder\Views\ItemsView.xaml.cs = DWPennyFinder\Views\ItemsView.xaml.cs
 	EndProjectSection
 EndProject
 Global

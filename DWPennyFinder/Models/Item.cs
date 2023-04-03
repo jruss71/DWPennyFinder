@@ -1,5 +1,6 @@
 ﻿using System;
 using SQLite;
+using Xamarin.Forms.Maps;
 
 namespace DWPennyFinder.Models
 {
@@ -14,5 +15,14 @@ namespace DWPennyFinder.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool HaveItem { get; internal set; }
+
+        // Computed property PinPosition
+        public Position PinPosition
+        {
+            get
+            {
+                return new Position(Latitude, Longitude);
+            }
+        }
     }
 }
