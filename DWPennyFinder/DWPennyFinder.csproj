@@ -13,6 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\" />
+    <None Remove="item.db3" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />
@@ -22,5 +23,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="item.db3" />
   </ItemGroup>
 </Project>

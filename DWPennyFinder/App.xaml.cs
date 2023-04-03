@@ -7,6 +7,8 @@ using DWPennyFinder.Data;
 using DWPennyFinder.Models;
 using SQLite;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace DWPennyFinder
 {
@@ -18,22 +20,49 @@ namespace DWPennyFinder
         {
             get
             {
-                if (database == null)
-                {
-                    database = new ItemDatabase(Path.Combine("/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Database", "item.db3"));
-               
+                
+
+                    //database = new ItemDatabase(Path.Combine("/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Resources", "item.db3"));
+
+                    
                     // Insert initial data into the database
-                    InsertInitialData();
+                    Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
+                Stream dbStream = assembly.GetManifestResourceStream("DWPennyFinder.item.db3");
+                //Stream dbStream = new FileStream("/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Resources/item.db3", FileMode.Open);
+                // Debug.WriteLine("test" + assembly.GetManifestResourceNames());
+                //string resourceName = "DWPennyFinder.Resources.item.db3";
+                //Stream dbStream = assembly.GetManifestResourceStream(resourceName);
+                
+
+                if (dbStream == null)
+                {
+                    throw new ArgumentException($"Resource  not found.");
                 }
-                return database;
+
+                if (!File.Exists(DatabasePath))
+                    {
+                    
+                    FileStream fileStream = File.Create(DatabasePath);
+                        dbStream.Seek(0, SeekOrigin.Begin);
+                        dbStream.CopyTo(fileStream);
+                        dbStream.Close();
+                    }
+                //else
+                //{
+                //    File.Deslete(DatabasePath);
+                //}
+                    //InsertInitialData();
+                    database = new ItemDatabase(DatabasePath);
+                    return database;
+
             }
         }
         public static string DatabasePath
         {
             get
             {
-                var basePath = "/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Database";
-                return Path.Combine(basePath, "item.db3");
+                String databasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "item.db3");
+                return databasePath;
             }
         }
 
@@ -46,7 +75,7 @@ namespace DWPennyFinder
                 conn.CreateTable<Item>();
 
                 // Check if the Items table already has data
-                var count = conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Items");
+                var count = conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Item");
                 if (count == 0)
                 {
                     // Add some initial data
@@ -68,11 +97,9 @@ namespace DWPennyFinder
 
         protected override void OnStart ()
         {
-            var dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "mydatabase.db3");
-            var database = new SQLiteService(dbPath);
 
         }
-
+        
         protected override void OnSleep ()
         {
         }
@@ -81,6 +108,7 @@ namespace DWPennyFinder
         {
         }
     }
+
 
     internal class SQLiteService
     {
