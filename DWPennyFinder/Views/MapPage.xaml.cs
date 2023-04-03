@@ -31,6 +31,7 @@ namespace DWPennyFinder.Views
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
             slider.Value = defaultZoomLevel;
+            //customMap.IsVisible = false;
         }
 
         private async Task LoadItems()
@@ -74,8 +75,13 @@ namespace DWPennyFinder.Views
             }
             else if (BindingContext is ItemsViewModel vmList)
             {
+                var mapSpan = MapSpan.FromCenterAndRadius(
+                 new Position(28.4187299399954, -81.58118473920125), Distance.FromMiles(1.0));
+                customMap.MoveToRegion(mapSpan);
+
                 await LoadItems();
-                Boolean movedToRegion = false;
+                
+                Boolean movedToRegion = true;
 
                 customMap.CustomPins = new List<CustomPin>();
                 // This is the list view so lets add pins for the full list
@@ -103,7 +109,7 @@ namespace DWPennyFinder.Views
                                 Type = PinType.Place
 
                             };
-                            customMap.CustomPins = new List<CustomPin> { pin };
+                            customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                             //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37.79752, -122.40183), Distance.FromMiles(1.0)));
                             //custompinList.Add(pin);
@@ -119,15 +125,16 @@ namespace DWPennyFinder.Views
                             }
                         
                         }
+                        previousItem = item;
                     }
-                    customMap.CustomPins = custompinList;
-                    if (!movedToRegion)
-                    {
-                        movedToRegion = true;
-                        var mapSpan = MapSpan.FromCenterAndRadius(previousItem.PinPosition, Distance.FromMiles(1.0));
-                        //customMap.MoveToRegion(mapSpan);
-
-                    }
+                    //customMap.CustomPins = custompinList;
+                    //if (!movedToRegion)
+                    //{
+                    //    movedToRegion = true;
+                    //    var mapSpan = MapSpan.FromCenterAndRadius(previousItem.PinPosition, Distance.FromMiles(1.0));
+                    //    //customMap.IsVisible = true;
+                    //    customMap.MoveToRegion(mapSpan);
+                    //}
                 }
                
                 // Set the slider value to match the default zoom level of the map

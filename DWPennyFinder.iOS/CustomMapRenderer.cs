@@ -8,6 +8,7 @@ using DWPennyFinder.iOS;
 using Foundation;
 using MapKit;
 using UIKit;
+using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
@@ -20,6 +21,7 @@ namespace CustomRenderer.iOS
     {
         UIView customPinView;
         List<CustomPin> customPins;
+        CustomMap formsMap;
 
         protected override void OnElementChanged(ElementChangedEventArgs<View> e)
         {
@@ -36,7 +38,7 @@ namespace CustomRenderer.iOS
 
             if (e.NewElement != null)
             {
-                var formsMap = (CustomMap)e.NewElement;
+                formsMap = (CustomMap)e.NewElement;
                 var nativeMap = Control as MKMapView;
                 customPins = formsMap.CustomPins;
 
@@ -57,10 +59,13 @@ namespace CustomRenderer.iOS
                 };
                 map.DidAddAnnotationViews += (object sender, MKMapViewAnnotationEventArgs eventArgs) =>
                 {
-                    foreach (var anno in ((MKMapView)sender).Annotations)
-                    {
-                        ((MKMapView)sender).SelectAnnotation(anno, true);
-                    }
+                    //int i = 0;
+                    //foreach (var anno in ((MKMapView)sender).Annotations)
+                    //{
+                    //    ((MKMapView)sender).SelectAnnotation(anno, true);
+                    //    Console.WriteLine("inside Annotations Loop " + i);
+                    //    i++;
+                    //}
 
                 };
             }
@@ -72,7 +77,7 @@ namespace CustomRenderer.iOS
 
             if (annotation is MKUserLocation)
                 return null;
-
+            customPins = formsMap.CustomPins;
             var customPin = GetCustomPin(annotation as MKPointAnnotation);
             if (customPin == null)
             {
@@ -111,7 +116,14 @@ namespace CustomRenderer.iOS
             var options = new MKMapSnapshotOptions();
             options.Size = new CGSize(width, height);
             options.MapType = MKMapType.SatelliteFlyover;
-            options.Camera = MKMapCamera.CameraLookingAtCenterCoordinate(annotationView.Annotation.Coordinate, 250, 65, 0);
+            try
+            {
+                //options.Camera = MKMapCamera.CameraLookingAtCenterCoordinate(annotationView.Annotation.Coordinate, 250, 65, 0);
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString()); 
+            }
+                
 
             var snapshotter = new MKMapSnapshotter(options);
             snapshotter.Start((snapshot, error) =>
@@ -189,6 +201,7 @@ namespace CustomRenderer.iOS
         CustomPin GetCustomPin(MKPointAnnotation annotation)
         {
             var position = new Position(annotation.Coordinate.Latitude, annotation.Coordinate.Longitude);
+ 
             foreach (var pin in customPins)
             {
                 if (pin.Position == position)
