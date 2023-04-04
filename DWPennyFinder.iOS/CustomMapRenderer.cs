@@ -105,13 +105,13 @@ namespace CustomRenderer.iOS
         void configureDetailView(MKAnnotationView annotationView)
         {
             int width = 100;
-            int height = 50;
+            int height = 100;
 
             var snapshotView = new UIView();
             snapshotView.TranslatesAutoresizingMaskIntoConstraints = false;
             NSDictionary views = NSDictionary.FromObjectAndKey(snapshotView, new NSString("snapshotView"));
-            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[snapshotView(200)]", new NSLayoutFormatOptions(), null, views));
-            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[snapshotView(50)]", new NSLayoutFormatOptions(), null, views));
+            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[snapshotView(250)]", new NSLayoutFormatOptions(), null, views));
+            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[snapshotView(100)]", new NSLayoutFormatOptions(), null, views));
 
             var options = new MKMapSnapshotOptions();
             options.Size = new CGSize(width, height);
@@ -120,10 +120,11 @@ namespace CustomRenderer.iOS
             {
                 //options.Camera = MKMapCamera.CameraLookingAtCenterCoordinate(annotationView.Annotation.Coordinate, 250, 65, 0);
             }
-            catch (Exception e) {
-                Console.WriteLine(e.ToString()); 
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
             }
-                
+
 
             var snapshotter = new MKMapSnapshotter(options);
             snapshotter.Start((snapshot, error) =>
@@ -133,16 +134,21 @@ namespace CustomRenderer.iOS
                     UILabel label = new UILabel();
                     UILabel label2 = new UILabel();
                     UILabel label3 = new UILabel();
+                    
+
                     label.Text = ((CustomMKAnnotationView)annotationView).Park;
                     label2.Text = ((CustomMKAnnotationView)annotationView).Location;
                     label3.Text = ((CustomMKAnnotationView)annotationView).Name;
+                    label3.LineBreakMode = UILineBreakMode.WordWrap;
+                    label3.Lines = 0;
+                    //Console.WriteLine(label3.Text);
                     //UIButton uIButton = new UIButton(UIButtonType.System);
                     //uIButton.SetTitle("Click Here", UIControlState.Normal);
 
                     //uIButton.Frame = new CGRect(150, 10, 100, 15);
-                    label.Frame = new CGRect(0, 0, 200, 20);
-                    label2.Frame = new CGRect(0, 15, 200, 20);
-                    label3.Frame = new CGRect(0, 25, 200, 20);
+                    label.Frame = new CGRect(0, 0, 250, 20);
+                    label2.Frame = new CGRect(0, 15, 250, 20);
+                    label3.Frame = new CGRect(0, 25, 250, 70);
                     // Add your custom controls here
 
                     label.TextAlignment = UITextAlignment.Left;
@@ -177,15 +183,15 @@ namespace CustomRenderer.iOS
             CustomMKAnnotationView customView = e.View as CustomMKAnnotationView;
             customPinView = new UIView();
 
-            if (customView.Name.Equals("Xamarin"))
-            {
-                customPinView.Frame = new CGRect(0, 0, 200, 84);
-                var image = new UIImageView(new CGRect(0, 0, 200, 84));
-                //image.Image = UIImage.FromFile("xamarin.png");
-                customPinView.AddSubview(image);
-                customPinView.Center = new CGPoint(0, -(e.View.Frame.Height + 75));
-                e.View.AddSubview(customPinView);
-            }
+            //if (customView.Name.Equals("Xamarin"))
+            //{
+            //    customPinView.Frame = new CGRect(0, 0, 200, 84);
+            //    var image = new UIImageView(new CGRect(0, 0, 200, 84));
+            //    //image.Image = UIImage.FromFile("xamarin.png");
+            //    customPinView.AddSubview(image);
+            //    customPinView.Center = new CGPoint(0, -(e.View.Frame.Height + 75));
+            //    e.View.AddSubview(customPinView);
+            //}
         }
 
         void OnDidDeselectAnnotationView(object sender, MKAnnotationViewEventArgs e)
@@ -201,7 +207,7 @@ namespace CustomRenderer.iOS
         CustomPin GetCustomPin(MKPointAnnotation annotation)
         {
             var position = new Position(annotation.Coordinate.Latitude, annotation.Coordinate.Longitude);
- 
+
             foreach (var pin in customPins)
             {
                 if (pin.Position == position)

@@ -14,8 +14,8 @@ using System.Linq;
 //using DWPennyFinder.Services;
 
 namespace DWPennyFinder.Views
-{	
-	public partial class MapPage : ContentPage
+{
+    public partial class MapPage : ContentPage
     {
         private Item item;
         private ObservableCollection<Item> items;
@@ -48,7 +48,7 @@ namespace DWPennyFinder.Views
             Item previousItem;
             if (BindingContext is Item vm)
             {
-                item = vm;                
+                item = vm;
 
                 var pin = new CustomPin
                 {
@@ -80,7 +80,7 @@ namespace DWPennyFinder.Views
                 customMap.MoveToRegion(mapSpan);
 
                 await LoadItems();
-                
+
                 Boolean movedToRegion = true;
 
                 customMap.CustomPins = new List<CustomPin>();
@@ -94,6 +94,7 @@ namespace DWPennyFinder.Views
                 if (items.Count > 0)
                 {
                     previousItem = items.First();
+                    String pennyName = previousItem.Name;
                     customMap.CustomPins = new List<CustomPin>();
                     foreach (Item item in items)
                     {
@@ -102,13 +103,14 @@ namespace DWPennyFinder.Views
                             var pin = new CustomPin
                             {
                                 Position = previousItem.PinPosition,
-                                Name = previousItem.Name,
+                                Name = pennyName,
                                 Location = previousItem.Location,
                                 Park = previousItem.Park,
-                                Label = previousItem.Location,
+                                Label = string.Empty,
                                 Type = PinType.Place
 
                             };
+                            pennyName = item.Name;
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                             //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37.79752, -122.40183), Distance.FromMiles(1.0)));
@@ -121,9 +123,11 @@ namespace DWPennyFinder.Views
                         {
                             if (previousItem.Name != item.Name)
                             {
-                                previousItem.Name += "\n" + item.Name;
+                                pennyName += "\n" + item.Name;
+                                Console.WriteLine(pennyName);
                             }
-                        
+                    
+
                         }
                         previousItem = item;
                     }
@@ -136,7 +140,7 @@ namespace DWPennyFinder.Views
                     //    customMap.MoveToRegion(mapSpan);
                     //}
                 }
-               
+
                 // Set the slider value to match the default zoom level of the map
                 var latlongDegrees = 360 / (Math.Pow(2, defaultZoomLevel));
                 slider.Value = defaultZoomLevel;
@@ -181,10 +185,9 @@ namespace DWPennyFinder.Views
             customMap.Pins.Clear();
         }
 
-      
 
-        
+
+
     }
 
 }
-
