@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using SQLite;
 using Xamarin.Forms.Maps;
 
 namespace DWPennyFinder.Models
 {
-    public class Item
+    public class Item 
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
@@ -24,5 +25,7 @@ namespace DWPennyFinder.Models
                 return new Position(Latitude, Longitude);
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
