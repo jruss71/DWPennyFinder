@@ -17,11 +17,6 @@ namespace DWPennyFinder.ViewModels
 
         
 
-        private async void LoadItem(string itemId)
-        {
-           // Item Item = await DataStore.GetItemAsync(itemId);
-        }
-
 
         private string itemId;
         private string name;
@@ -74,22 +69,10 @@ namespace DWPennyFinder.ViewModels
             }
         }
 
-        //public async Task LoadItem(string itemId)
-        //{
-        //    try
-        //    {
-        //        item = await DataStore.GetItemAsync(itemId);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine($"Failed to load item with ID {itemId}: {ex}");
-        //    }
-        //}
         public async void LoadItemId(string itemId)
         {
             try
             {
-               // var item = await DataStore.GetItemAsync(itemId);
                 ItemId = item.itemId;
                 Name = item.Name;
                 Location = item.Location;

@@ -16,9 +16,6 @@ namespace DWPennyFinder
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
 
-            //Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
-            //Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            //Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
         }
 
     }

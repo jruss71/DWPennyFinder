@@ -20,18 +20,10 @@ namespace DWPennyFinder
         {
             get
             {
-                
-
-                    //database = new ItemDatabase(Path.Combine("/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Resources", "item.db3"));
-
-                    
-                    // Insert initial data into the database
-                    Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
+               
+                // Insert initial data into the database
+                Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
                 Stream dbStream = assembly.GetManifestResourceStream("DWPennyFinder.item.db3");
-                //Stream dbStream = new FileStream("/Users/jruss/projects/DWPennyFinder/DWPennyFinder.iOS/Resources/item.db3", FileMode.Open);
-                // Debug.WriteLine("test" + assembly.GetManifestResourceNames());
-                //string resourceName = "DWPennyFinder.Resources.item.db3";
-                //Stream dbStream = assembly.GetManifestResourceStream(resourceName);
                 
 
                 if (dbStream == null)
@@ -47,11 +39,7 @@ namespace DWPennyFinder
                         dbStream.CopyTo(fileStream);
                         dbStream.Close();
                     }
-                //else
-                //{
-                //    File.Deslete(DatabasePath);
-                //}
-                    //InsertInitialData();
+             
                     database = new ItemDatabase(DatabasePath);
                     return database;
 
@@ -66,32 +54,13 @@ namespace DWPennyFinder
             }
         }
 
-        private static void InsertInitialData()
-        {
-            // Open the database connection
-            using (var conn = new SQLiteConnection(App.DatabasePath))
-            {
-                // Create the table if it doesn't exist
-                conn.CreateTable<Item>();
-
-                // Check if the Items table already has data
-                var count = conn.ExecuteScalar<int>("SELECT COUNT(*) FROM Item");
-                if (count == 0)
-                {
-                    // Add some initial data
-                    conn.Insert(new Item { Name = "Item 1", Park = "Description 1" });
-                    conn.Insert(new Item { Name = "Item 2", Park = "Description 2" });
-                    conn.Insert(new Item { Name = "Item 3", Park = "Description 3" });
-                }
-            }
-        }
+      
 
 
         public App ()
         {
             InitializeComponent();
 
-            //DependencyService.Register<MockDataStore>();
             MainPage = new NavigationPage(new AppShell());
         }
 

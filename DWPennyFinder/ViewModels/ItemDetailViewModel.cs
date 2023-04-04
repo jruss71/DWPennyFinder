@@ -54,27 +54,10 @@ namespace DWPennyFinder.ViewModels
             set
             {
                 itemId = value;
-                LoadItemId(value);
             }
         }        
 
-        public async void LoadItemId(string itemId)
-        {
-            try
-            {
-                //var item = await DataStore.GetItemAsync(itemId);
-                //ItemId = item.itemId;
-                //Name = item.Name;
-                //Location = item.Location;
-                //Park = item.Park;
-                //Latitude = item.Latitude;
-                //Longitude = item.Longitude;
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Failed to Load Item");
-            }
-        }
+        
     }
 }
 

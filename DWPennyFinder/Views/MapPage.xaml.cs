@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using DWPennyFinder.Models;
 using Xamarin.Forms;
-using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using DWPennyFinder.ViewModels;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using DWPennyFinder.Converters;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-//using DWPennyFinder.Services;
 
 namespace DWPennyFinder.Views
 {
@@ -21,7 +18,7 @@ namespace DWPennyFinder.Views
         private ObservableCollection<Item> items;
         private ItemsViewModel _viewModel;
 
-        private double defaultZoomLevel = 16;
+        private readonly double defaultZoomLevel = 16;
 
         public MapPage()
         {
@@ -31,7 +28,6 @@ namespace DWPennyFinder.Views
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
             slider.Value = defaultZoomLevel;
-            //customMap.IsVisible = false;
         }
 
         private async Task LoadItems()
@@ -81,7 +77,6 @@ namespace DWPennyFinder.Views
 
                 await LoadItems();
 
-                Boolean movedToRegion = true;
 
                 customMap.CustomPins = new List<CustomPin>();
                 // This is the list view so lets add pins for the full list
@@ -113,11 +108,6 @@ namespace DWPennyFinder.Views
                             pennyName = item.Name;
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
-                            //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37.79752, -122.40183), Distance.FromMiles(1.0)));
-                            //custompinList.Add(pin);
-                            //customMap.CustomPins.Add(pin);
-                            // customMap.Pins.Add(pin);
-                            //customMap.MoveToRegion(MapSpan.FromCenterAndRadius(pin.Position, Distance.FromMiles(.5)));
                         }
                         else
                         {
@@ -131,23 +121,12 @@ namespace DWPennyFinder.Views
                         }
                         previousItem = item;
                     }
-                    //customMap.CustomPins = custompinList;
-                    //if (!movedToRegion)
-                    //{
-                    //    movedToRegion = true;
-                    //    var mapSpan = MapSpan.FromCenterAndRadius(previousItem.PinPosition, Distance.FromMiles(1.0));
-                    //    //customMap.IsVisible = true;
-                    //    customMap.MoveToRegion(mapSpan);
-                    //}
+             
                 }
 
-                // Set the slider value to match the default zoom level of the map
                 var latlongDegrees = 360 / (Math.Pow(2, defaultZoomLevel));
                 slider.Value = defaultZoomLevel;
-                //if (customMap.VisibleRegion != null)
-                //{
-                //    customMap.MoveToRegion(new MapSpan(customMap.VisibleRegion.Center, latlongDegrees, latlongDegrees));
-                //}
+              
 
             }
         }
