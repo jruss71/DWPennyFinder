@@ -8,26 +8,54 @@
              x:DataType="viewmodels:ItemsViewModel"
              Title="{Binding Title}">
 
-          
-
+    <ContentPage.Resources>
+        <local:HalfScreenConverter x:Key="HalfScreenConverter" />
+    </ContentPage.Resources>
+    
     <StackLayout Margin="10">
-        
+
         <local:CustomMap x:Name="customMap" MapType="Street"  />
-            <Slider x:Name= "slider" Margin="20,0,20,0"
+
+        <Slider x:Name= "slider" Margin="20,0,20,0"
             Maximum="20"
             Minimum="10"
             ValueChanged="OnSliderValueChanged"/>
-    <Grid VerticalOptions="End">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" Text="Street" Clicked="OnButtonClicked" />
-        <Button Grid.Column="1" Text="Satellite" Clicked="OnButtonClicked" />
-        <Button Grid.Column="2" Text="Hybrid" Clicked="OnButtonClicked" />
-    </Grid>
-</StackLayout>
+        <Grid VerticalOptions="End">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Text="Street" Clicked="OnButtonClicked" />
+            <Button Grid.Column="1" Text="Satellite" Clicked="OnButtonClicked" />
+            <Button Grid.Column="2" Text="Hybrid" Clicked="OnButtonClicked" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Name" Grid.Column="0" HorizontalOptions="Start"  VerticalOptions="Start"/>
+            <Label Text="Purchased" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Start"/>
+        </Grid>
+        <ListView x:Name="checkboxList"
+                  HasUnevenRows="True"
+                  IsVisible="False">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="{Binding Location}" Grid.Column="0"/>
+                            <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="1"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
-
+    </StackLayout>
 </ContentPage>

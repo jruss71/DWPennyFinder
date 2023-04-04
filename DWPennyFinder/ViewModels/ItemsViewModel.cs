@@ -6,6 +6,7 @@ using DWPennyFinder.Models;
 using DWPennyFinder.Views;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DWPennyFinder.ViewModels
 {
@@ -24,17 +25,22 @@ namespace DWPennyFinder.ViewModels
         public string Location { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public bool IsSelected { get; set; }
+
         public INavigation Navigation { get; set; }
+        public bool IsCheckboxListVisible { get; set; }
+
+        public ObservableCollection<Item> CheckBoxItems { get; set; }
+        
 
         public ItemsViewModel()
         {
             Title = "Browse 100th Pennies";
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
             ItemTapped = new Command<Item>(OnItemSelected);
-
             AddItemCommand = new Command(OnAddItem);
+            CheckBoxItems = new ObservableCollection<Item>();
         }
 
         public async Task ExecuteLoadItemsCommand()
@@ -48,6 +54,7 @@ namespace DWPennyFinder.ViewModels
                 foreach (var item in items)
                 {
                     Items.Add(item);
+
                 }
             }
             catch (Exception ex)
@@ -86,11 +93,22 @@ namespace DWPennyFinder.ViewModels
             if (item == null)
                 return;
 
-
             var mapPage = new MapPage();
             mapPage.BindingContext = item;
             await Navigation.PushAsync(mapPage);
 
         }
+
+        public void CheckBoxItemsByLocation(string location)
+        {
+            CheckBoxItems.Clear();
+
+            var filteredItems = Items.Where(item => item.Location == location);
+            foreach (var item in filteredItems)
+            {
+                CheckBoxItems.Add(item);
+            }
+        }
+
     }
 }

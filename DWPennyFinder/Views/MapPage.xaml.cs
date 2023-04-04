@@ -8,6 +8,7 @@ using DWPennyFinder.Converters;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Globalization;
 
 
 namespace DWPennyFinder.Views
@@ -28,6 +29,12 @@ namespace DWPennyFinder.Views
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
             slider.Value = defaultZoomLevel;
+            customMap.MapClicked += CustomMap_MapClicked;
+        }
+
+        private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
+        {
+            checkboxList.IsVisible = false;
         }
 
         private async Task LoadItems()
@@ -55,7 +62,7 @@ namespace DWPennyFinder.Views
                     Park = item.Park,
                     Url = "www.disney.com"
                 };
-
+                //pin.MarkerClicked += Pin_MarkerClicked;
                 customMap.CustomPins = new List<CustomPin> { pin };
                 customMap.Pins.Add(pin);
                 var mapSpan = MapSpan.FromCenterAndRadius(pin.Position, Distance.FromMiles(0.5));
@@ -105,7 +112,15 @@ namespace DWPennyFinder.Views
                                 Type = PinType.Place
 
                             };
-                            pennyName = item.Name;
+                            pin.MarkerClicked += async (s, args) =>
+                            {
+                                CustomPin selectedPin = (CustomPin)s;
+                                vmList.CheckBoxItemsByLocation(selectedPin.Location);
+                                checkboxList.ItemsSource = vmList.CheckBoxItems;
+                                checkboxList.IsVisible = true;
+                                checkboxList.HeightRequest = customMap.Height / 2;
+                                customMap.HeightRequest = customMap.Height / 2;
+                            };
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                         }
@@ -130,6 +145,8 @@ namespace DWPennyFinder.Views
 
             }
         }
+
+        
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {
@@ -163,10 +180,6 @@ namespace DWPennyFinder.Views
             base.OnDisappearing();
             customMap.Pins.Clear();
         }
-
-
-
-
     }
 
 }
