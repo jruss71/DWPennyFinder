@@ -15,6 +15,7 @@ using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
 using WebKit;
+using System;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.iOS
@@ -79,7 +80,17 @@ namespace CustomRenderer.iOS
                 annotationView = new CustomMKAnnotationView(annotation, customPin.Name);
                 annotationView.Image = UIImage.FromFile("pin.png");
                 annotationView.CalloutOffset = new CGPoint(0, 0);
-                annotationView.RightCalloutAccessoryView = UIButton.FromType(UIButtonType.DetailDisclosure);
+                string hexColor = "#886EB6"; 
+                UIColor uiColor = UIColor.FromRGB(
+                    Convert.ToInt32(hexColor.Substring(1, 2), 16),
+                    Convert.ToInt32(hexColor.Substring(3, 2), 16),
+                    Convert.ToInt32(hexColor.Substring(5, 2), 16)
+                );
+
+                UIButton infoButton = UIButton.FromType(UIButtonType.DetailDisclosure);
+                infoButton.TintColor = uiColor;
+
+                annotationView.RightCalloutAccessoryView = infoButton;
 
                 ((CustomMKAnnotationView)annotationView).Name = customPin.Name;
                 ((CustomMKAnnotationView)annotationView).Location = customPin.Location;

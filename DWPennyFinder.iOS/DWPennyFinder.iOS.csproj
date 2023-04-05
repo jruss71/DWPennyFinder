@@ -109,7 +109,6 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\58 1.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png" />
-    <BundleResource Include="Resources\mouse.png" />
     <BundleResource Include="Resources\mouse_30x30.png" />
   </ItemGroup>
   <ItemGroup>
