@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Globalization;
-
+using Rg.Plugins.Popup.Services;
 
 namespace DWPennyFinder.Views
 {
@@ -18,6 +18,7 @@ namespace DWPennyFinder.Views
         private Item item;
         private ObservableCollection<Item> items;
         private ItemsViewModel _viewModel;
+        //private CheckBoxContentView _checkboxView;
 
         private readonly double defaultZoomLevel = 16;
 
@@ -34,7 +35,7 @@ namespace DWPennyFinder.Views
 
         private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
         {
-            checkboxList.IsVisible = false;
+            //checkboxList.IsVisible = false;
         }
 
         private async Task LoadItems()
@@ -46,9 +47,9 @@ namespace DWPennyFinder.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-            List<CustomPin> custompinList = new List<CustomPin>();
-
+  
             Item previousItem;
+
             if (BindingContext is Item vm)
             {
                 item = vm;
@@ -83,8 +84,6 @@ namespace DWPennyFinder.Views
                 customMap.MoveToRegion(mapSpan);
 
                 await LoadItems();
-
-
                 customMap.CustomPins = new List<CustomPin>();
                 // This is the list view so lets add pins for the full list
                 items = new ObservableCollection<Item>(
@@ -112,15 +111,26 @@ namespace DWPennyFinder.Views
                                 Type = PinType.Place
 
                             };
-                            pin.MarkerClicked += async (s, args) =>
-                            {
-                                CustomPin selectedPin = (CustomPin)s;
-                                vmList.CheckBoxItemsByLocation(selectedPin.Location);
-                                checkboxList.ItemsSource = vmList.CheckBoxItems;
-                                checkboxList.IsVisible = true;
-                                checkboxList.HeightRequest = customMap.Height / 2;
-                                customMap.HeightRequest = customMap.Height / 2;
-                            };
+                            pennyName = item.Name;
+                            
+                            //pin.MarkerClicked += async (s, args) =>
+                            //{
+                            //    CustomPin selectedPin = (CustomPin)s;
+                            //    vmList.CheckBoxItemsByLocation(selectedPin.Location);
+                            //    var page = new CheckBoxContentPage(vmList.CheckBoxItems);
+                            //    // page.CheckBoxItems = vmList.CheckBoxItems;
+                            //    await PopupNavigation.Instance.PushAsync(page);
+                            //    //_checkboxView = new listViewContentView();
+
+                            //    //listViewContentView.BindingContext = vmList.CheckBoxItems;
+                            //    //checkboxList.ItemsSource = null;
+                            //    //checkboxList.ItemsSource = vmList.CheckBoxItems;
+                            //    //listViewContentView.IsVisible = true;
+                            //    //listViewContentView.HeightRequest = customMap.Height / 2;
+                            //    //customMap.HeightRequest = customMap.Height / 2;
+                            //    //Content = _checkboxView;
+                            //};
+
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                         }
@@ -131,12 +141,9 @@ namespace DWPennyFinder.Views
                                 pennyName += "\n" + item.Name;
                                 Console.WriteLine(pennyName);
                             }
-                    
-
                         }
                         previousItem = item;
                     }
-             
                 }
 
                 var latlongDegrees = 360 / (Math.Pow(2, defaultZoomLevel));

@@ -99,12 +99,12 @@ namespace DWPennyFinder.ViewModels
 
         }
 
-        public void CheckBoxItemsByLocation(string location)
+        public async Task CheckBoxItemsByLocation(string location)
         {
             CheckBoxItems.Clear();
 
-            var filteredItems = Items.Where(item => item.Location == location);
-            foreach (var item in filteredItems)
+            var items = await App.Database.GetItemsByLocation(location);
+            foreach (var item in items)
             {
                 CheckBoxItems.Add(item);
             }
