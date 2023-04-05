@@ -22,7 +22,7 @@
         VerticalOptions="EndAndExpand"
         HorizontalOptions="FillAndExpand"
         >
-        <Frame BackgroundColor="White" HasShadow="True"
+        <Frame HasShadow="True"
            CornerRadius="20" HeightRequest="300"
            >
             <StackLayout>
@@ -45,7 +45,7 @@
       <Button
             Clicked="OnClose"
             Text="Close"
-            TextColor="#A9D1DE" />
+            TextColor="White" />
     </StackLayout>
         </Frame>
     </StackLayout>
