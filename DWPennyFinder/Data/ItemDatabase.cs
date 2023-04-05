@@ -19,6 +19,12 @@ namespace DWPennyFinder.Data
         {
             return _database.Table<Item>().ToListAsync();
         }
+        public Task<List<Item>> GetItemsByLocation(string Location)
+        {
+            return _database.Table<Item>()
+                .Where(item  => item.Location == Location)
+                .ToListAsync();
+        }
 
         public Task<int> SaveItemAsync(Item item)
         {

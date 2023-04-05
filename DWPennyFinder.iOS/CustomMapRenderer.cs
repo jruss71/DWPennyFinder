@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+﻿using System.Collections.Generic;
 using CoreGraphics;
-using CustomRenderer;
 using CustomRenderer.iOS;
 using DWPennyFinder;
 using DWPennyFinder.iOS;
+using DWPennyFinder.ViewModels;
+using DWPennyFinder.Views;
 using Foundation;
 using MapKit;
+using Rg.Plugins.Popup.Services;
+using Rg.Plugins.Popup.Extensions;
 using UIKit;
-using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
+using WebKit;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.iOS
@@ -150,12 +151,16 @@ namespace CustomRenderer.iOS
             annotationView.DetailCalloutAccessoryView = snapshotView;
         }
 
-        void OnCalloutAccessoryControlTapped(object sender, MKMapViewAccessoryTappedEventArgs e)
+        async void OnCalloutAccessoryControlTapped(object sender, MKMapViewAccessoryTappedEventArgs e)
         {
             CustomMKAnnotationView customView = e.View as CustomMKAnnotationView;
-            if (!string.IsNullOrWhiteSpace(customView.Url))
+            ItemsViewModel viewModel = new ItemsViewModel();
+            if (!(customView.Location == null))
             {
-                UIApplication.SharedApplication.OpenUrl(new Foundation.NSUrl(customView.Url));
+                viewModel.CheckBoxItemsByLocation(customView.Location);
+                var page = new CheckBoxContentPage(viewModel.CheckBoxItems);
+                await PopupNavigation.Instance.PushAsync(page);
+
             }
         }
 
