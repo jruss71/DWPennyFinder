@@ -63,7 +63,6 @@ namespace DWPennyFinder.Views
                     Park = item.Park,
                     Url = "www.disney.com"
                 };
-                //pin.MarkerClicked += Pin_MarkerClicked;
                 customMap.CustomPins = new List<CustomPin> { pin };
                 customMap.Pins.Add(pin);
                 var mapSpan = MapSpan.FromCenterAndRadius(pin.Position, Distance.FromMiles(0.5));
@@ -80,7 +79,7 @@ namespace DWPennyFinder.Views
             else if (BindingContext is ItemsViewModel vmList)
             {
                 var mapSpan = MapSpan.FromCenterAndRadius(
-                 new Position(28.4187299399954, -81.58118473920125), Distance.FromMiles(1.0));
+                 new Position(28.385233, -81.56), Distance.FromMiles(3.0));
                 customMap.MoveToRegion(mapSpan);
 
                 await LoadItems();
@@ -112,25 +111,7 @@ namespace DWPennyFinder.Views
 
                             };
                             pennyName = item.Name;
-                            
-                            //pin.MarkerClicked += async (s, args) =>
-                            //{
-                            //    CustomPin selectedPin = (CustomPin)s;
-                            //    vmList.CheckBoxItemsByLocation(selectedPin.Location);
-                            //    var page = new CheckBoxContentPage(vmList.CheckBoxItems);
-                            //    // page.CheckBoxItems = vmList.CheckBoxItems;
-                            //    await PopupNavigation.Instance.PushAsync(page);
-                            //    //_checkboxView = new listViewContentView();
-
-                            //    //listViewContentView.BindingContext = vmList.CheckBoxItems;
-                            //    //checkboxList.ItemsSource = null;
-                            //    //checkboxList.ItemsSource = vmList.CheckBoxItems;
-                            //    //listViewContentView.IsVisible = true;
-                            //    //listViewContentView.HeightRequest = customMap.Height / 2;
-                            //    //customMap.HeightRequest = customMap.Height / 2;
-                            //    //Content = _checkboxView;
-                            //};
-
+                  
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                         }

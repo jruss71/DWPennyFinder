@@ -26,6 +26,8 @@ namespace DWPennyFinder.Models
             }
         }
 
+        public bool IsSelected { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

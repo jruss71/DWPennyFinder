@@ -32,5 +32,17 @@ namespace DWPennyFinder.Views
         {
             await PopupNavigation.Instance.PopAsync();
         }
+        private async void CheckedDone(object sender, CheckedChangedEventArgs e)
+        {
+            // get the sender
+            var cb = sender as CheckBox;
+
+            // use the BindingContext to get the bound Task
+            var item = cb.BindingContext as Item;
+
+            // task should already reflect the updated Value, no need
+            // to change it again
+            await App.Database.SaveItemAsync(item);
+        }
     }
 }
