@@ -182,4 +182,7 @@
   <ItemGroup>
     <Folder Include="Database\" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\mouse_30x30.png" />
+  </ItemGroup>
 </Project>
