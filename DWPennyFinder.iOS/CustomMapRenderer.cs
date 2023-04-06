@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CoreGraphics;
-using CustomRenderer;
 using CustomRenderer.iOS;
 using DWPennyFinder;
 using DWPennyFinder.iOS;
@@ -11,13 +10,10 @@ using Foundation;
 using MapKit;
 using Rg.Plugins.Popup.Services;
 using UIKit;
-using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
-using WebKit;
-using System;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.iOS
@@ -81,7 +77,10 @@ namespace CustomRenderer.iOS
                     Convert.ToInt32(hexColor.Substring(5, 2), 16)
                 );
 
-                UIButton infoButton = UIButton.FromType(UIButtonType.DetailDisclosure);
+                //UIButton infoButton = UIButton.FromType(UIButtonType.DetailDisclosure);
+                UIButton infoButton = UIButton.FromType(UIButtonType.System);
+                infoButton.SetTitle("Collect", UIControlState.Normal);
+
                 infoButton.TintColor = uiColor;
 
                 annotationView.RightCalloutAccessoryView = infoButton;

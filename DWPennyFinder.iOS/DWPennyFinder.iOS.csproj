@@ -185,4 +185,16 @@
   <ItemGroup>
     <BundleResource Include="Resources\mouse_30x30.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\insert-coin48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\trash48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\undo48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\screenwords.png" />
+  </ItemGroup>
 </Project>

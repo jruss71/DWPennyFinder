@@ -17,6 +17,10 @@ namespace DWPennyFinder.ViewModels
       
         public ICommand AddItemCommand { get; }
         public ICommand ItemTapped { get; }
+        public ICommand ItemCollected { get; }
+        public ICommand ItemRemoved { get; }
+        public ICommand DeleteCommand { get; }
+
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -35,6 +39,15 @@ namespace DWPennyFinder.ViewModels
             CheckBoxItems = new ObservableCollection<Item>();
             ItemTapped = new Command<ItemDetail>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
+            ItemCollected = new Command<ItemDetail>(OnItemCollected);
+            ItemRemoved = new Command<ItemDetail>(OnItemRemoved);
+            DeleteCommand = new Command<ItemDetail>(OnDeleteCommand);
+        }
+
+        public void OnDeleteCommand(ItemDetail itemDetail)
+        {
+            Console.WriteLine("Delete Fired");
+
         }
 
         public async Task ExecuteLoadItemsCommand()
@@ -89,7 +102,29 @@ namespace DWPennyFinder.ViewModels
         {
             await Navigation.PushAsync(new NewItemPage());
         }
+        private async void OnItemCollected(ItemDetail itemDetail)
+        {
+            if (itemDetail == null)
+                return;
+            // update the Collected value
+            itemDetail.item.Collected = true;
 
+            // save the item to the database
+            await App.Database.SaveItemAsync(itemDetail.item);
+
+        }
+        private async void OnItemRemoved(ItemDetail itemDetail)
+        {
+            if (itemDetail == null)
+                return;
+
+            // update the Collected value
+            itemDetail.item.Collected = false;
+
+            // save the item to the database
+            await App.Database.SaveItemAsync(itemDetail.item);
+
+        }
         async void OnItemSelected(ItemDetail item)
         {
             if (item == null)

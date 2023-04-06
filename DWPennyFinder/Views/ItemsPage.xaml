@@ -18,9 +18,21 @@
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
-
-               <DataTemplate>
-                    <ContentView Padding="10" x:DataType="model:ItemDetail">
+               
+             <DataTemplate>
+                <SwipeView>
+                    <SwipeView.LeftItems>
+                        <SwipeItems>
+                            <SwipeItem
+                            Text="Delete"
+                            BackgroundColor="Purple"
+                            IconImageSource="insert-coin48.png"
+                            Command="{Binding DeleteCommand}"
+                            CommandParameter="{Binding .}"                            
+                            />
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                        <ContentView Padding="10" x:DataType="model:ItemDetail">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -57,7 +69,7 @@
                             </TapGestureRecognizer>
                         </ContentView.GestureRecognizers>
                     </ContentView>
-
+                </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
