@@ -37,12 +37,15 @@ namespace DWPennyFinder.Views
             // get the sender
             var cb = sender as CheckBox;
 
-            // use the BindingContext to get the bound Task
+            // use the BindingContext to get the bound Item
             var item = cb.BindingContext as Item;
 
-            // task should already reflect the updated Value, no need
-            // to change it again
+            // update the Collected value
+            item.Collected = e.Value;
+
+            // save the item to the database
             await App.Database.SaveItemAsync(item);
         }
+
     }
 }

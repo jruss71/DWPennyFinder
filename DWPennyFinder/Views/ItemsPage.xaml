@@ -13,24 +13,24 @@
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+    <RefreshView x:DataType="local:ItemsViewModel" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
         <CollectionView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
                <DataTemplate>
-                     <StackLayout Padding="10" x:DataType="model:Item">
-                        <Label Text="{Binding Name}" 
+                     <StackLayout Padding="10" x:DataType="model:ItemDetail">
+                        <Label Text="{Binding item.Name}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="16" />
                         <Label LineBreakMode="NoWrap"
                             Style="{DynamicResource ListItemDetailTextStyle}"
                             FontSize="13" >
-                        <Label.Text>
-                            <MultiBinding Converter="{StaticResource LocationParkConverter}">
-                                <Binding Path="Park" />
-                                <Binding Path="Location" />
+                            <Label.Text>
+                                <MultiBinding Converter="{StaticResource LocationParkConverter}">
+                                    <Binding Path="location.name" />
+                                    <Binding Path="machine.name" />
                                 </MultiBinding>
                             </Label.Text>
                         </Label>

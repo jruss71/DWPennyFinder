@@ -12,17 +12,86 @@ namespace DWPennyFinder.Data
         public ItemDatabase(string dbPath)
         {
             _database = new SQLiteAsyncConnection(dbPath);
+            _database.CreateTableAsync<Location>().Wait();
+            _database.CreateTableAsync<Machine>().Wait();
             _database.CreateTableAsync<Item>().Wait();
         }
+
+        // Location methods
+
+        public Task<List<Location>> GetLocationsAsync()
+        {
+            return _database.Table<Location>().ToListAsync();
+        }
+
+        public Task<Location> GetLocationAsync(int id)
+        {
+            return _database.Table<Location>().Where(location => location.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Task<int> SaveLocationAsync(Location location)
+        {
+            if (location.Id != 0)
+            {
+                return _database.UpdateAsync(location);
+            }
+            else
+            {
+                return _database.InsertAsync(location);
+            }
+        }
+
+        public Task<int> DeleteLocationAsync(Location location)
+        {
+            return _database.DeleteAsync(location);
+        }
+
+        // Machine methods
+
+        public Task<List<Machine>> GetMachinesAsync()
+        {
+            return _database.Table<Machine>().ToListAsync();
+        }
+
+        public Task<List<Machine>> GetMachinesByLocationAsync(int locationId)
+        {
+            return _database.Table<Machine>()
+                .Where(machine => machine.locationId == locationId)
+                .ToListAsync();
+        }
+        public Task<Machine> GetMachineByIdAsync(int id)
+        {
+            return _database.Table<Machine>().Where(machine => machine.Id == id).FirstOrDefaultAsync();
+        }
+
+        public Task<int> SaveMachineAsync(Machine machine)
+        {
+            if (machine.Id != 0)
+            {
+                return _database.UpdateAsync(machine);
+            }
+            else
+            {
+                return _database.InsertAsync(machine);
+            }
+        }
+
+        public Task<int> DeleteMachineAsync(Machine machine)
+        {
+            return _database.DeleteAsync(machine);
+        }
+
+        // Item methods
 
         public Task<List<Item>> GetItemsAsync()
         {
             return _database.Table<Item>().ToListAsync();
         }
-        public Task<List<Item>> GetItemsByLocation(string Location)
+
+        public Task<List<Item>> GetItemsByMachineAsync(int machineId)
         {
             return _database.Table<Item>()
-                .Where(item  => item.Location == Location)
+                .Where(item => item.machineId == machineId)
                 .ToListAsync();
         }
 
@@ -42,5 +111,42 @@ namespace DWPennyFinder.Data
         {
             return _database.DeleteAsync(item);
         }
+
+        public async Task SaveItemDetailAsync(ItemDetail itemDetail)
+        {
+            // Save or update the Location
+            if (itemDetail.location.Id == 0)
+            {
+                await _database.InsertAsync(itemDetail.location); ;
+            }
+            else
+            {
+                await _database.UpdateAsync(itemDetail.location);
+            }
+
+            // Save or update the Machine and set its LocationId
+            itemDetail.machine.locationId = itemDetail.location.Id;
+            if (itemDetail.machine.Id == 0)
+            {
+                await _database.InsertAsync(itemDetail.machine);
+            }
+            else
+            {
+                await _database.UpdateAsync(itemDetail.machine);
+            }
+
+            // Save or update the Item and set its MachineId
+            itemDetail.machine.locationId = itemDetail.location.Id;
+            if (itemDetail.item.Id == 0)
+            {
+                await _database.InsertAsync(itemDetail.item);
+            }
+            else
+            {
+                await _database.UpdateAsync(itemDetail.item);
+            }
+        }
+
     }
+
 }

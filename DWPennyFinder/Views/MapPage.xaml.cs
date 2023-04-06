@@ -15,8 +15,8 @@ namespace DWPennyFinder.Views
 {
     public partial class MapPage : ContentPage
     {
-        private Item item;
-        private ObservableCollection<Item> items;
+        private ItemDetail itemDetail;
+        private ObservableCollection<ItemDetail> items;
         private ItemsViewModel _viewModel;
         //private CheckBoxContentView _checkboxView;
 
@@ -47,21 +47,21 @@ namespace DWPennyFinder.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-  
-            Item previousItem;
 
-            if (BindingContext is Item vm)
+            ItemDetail previousItem;
+
+            if (BindingContext is ItemDetail vm)
             {
-                item = vm;
+                itemDetail = vm;
 
                 var pin = new CustomPin
                 {
-                    Position = item.PinPosition, //pinPosition,
-                    Name = item.Name,
+                    Position = itemDetail.machine.pinPosition, //pinPosition,
+                    Name = itemDetail.item.Name,
                     Label = string.Empty,
-                    Location = item.Location,
-                    Park = item.Park,
-                    Url = "www.disney.com"
+                    Machine = itemDetail.machine.name,
+                    Location = itemDetail.location.name,
+                    MachineID = itemDetail.machine.Id
                 };
                 customMap.CustomPins = new List<CustomPin> { pin };
                 customMap.Pins.Add(pin);
@@ -85,45 +85,45 @@ namespace DWPennyFinder.Views
                 await LoadItems();
                 customMap.CustomPins = new List<CustomPin>();
                 // This is the list view so lets add pins for the full list
-                items = new ObservableCollection<Item>(
+                var itemDetails = new ObservableCollection<ItemDetail>(
                     vmList.Items
-                    .OrderBy(item => item.Location)
-                    .ThenBy(item => item.Name));
+                    .OrderBy(item => item.location.name)
+                    .ThenBy(item => item.item.Name));
 
                 // we initialize the PrevLocation for our first item so it won't automatically be seen as a new "group"
-                if (items.Count > 0)
+                if (itemDetails.Count > 0)
                 {
-                    previousItem = items.First();
-                    String pennyName = previousItem.Name;
-                    customMap.CustomPins = new List<CustomPin>();
-                    foreach (Item item in items)
+                    previousItem = itemDetails.First();
+                    String pennyName = previousItem.item.Name;
+                    foreach (ItemDetail itemDetail in itemDetails)
                     {
-                        if (item.Location != previousItem.Location)
+                        if (itemDetail.machine.name != previousItem.machine.name)
                         {
                             var pin = new CustomPin
                             {
-                                Position = previousItem.PinPosition,
+                                Position = previousItem.machine.pinPosition,
                                 Name = pennyName,
-                                Location = previousItem.Location,
-                                Park = previousItem.Park,
+                                Machine = previousItem.machine.name,
+                                Location = previousItem.location.name,
+                                MachineID = previousItem.machine.Id,
                                 Label = string.Empty,
                                 Type = PinType.Place
 
                             };
-                            pennyName = item.Name;
-                  
+                            pennyName = itemDetail.item.Name;
+
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                         }
                         else
                         {
-                            if (previousItem.Name != item.Name)
+                            if (previousItem.item.Name != itemDetail.item.Name)
                             {
-                                pennyName += "\n" + item.Name;
+                                pennyName += "\n" + itemDetail.item.Name;
                                 Console.WriteLine(pennyName);
                             }
                         }
-                        previousItem = item;
+                        previousItem = itemDetail;
                     }
                 }
 

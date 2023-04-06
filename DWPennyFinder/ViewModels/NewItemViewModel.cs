@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using DWPennyFinder.Models;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using Location = DWPennyFinder.Models.Location;
 
 namespace DWPennyFinder.ViewModels
 {
     public class NewItemViewModel : BaseViewModel
     {
-        private string name;
-        private string park;
-        private string location;
+        private Item _item;
+        private Location _location;
+        private Machine _machine;
         private double latitude;
         private double longitude;
 
@@ -21,6 +24,7 @@ namespace DWPennyFinder.ViewModels
         public NewItemViewModel()
         {
             SaveCommand = new Command(OnSave, ValidateSave);
+            SaveCommand = new Command(async () => await SaveItemDetailAsync(), () => !IsBusy);
             CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
@@ -28,25 +32,25 @@ namespace DWPennyFinder.ViewModels
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(name)
-                && !String.IsNullOrWhiteSpace(park) && !String.IsNullOrWhiteSpace(location);
+            return !String.IsNullOrWhiteSpace(_item.Name)
+                && !String.IsNullOrWhiteSpace(_location.name) && !String.IsNullOrWhiteSpace(_machine.name);
+        }
+        public Item Item
+        {
+            get => _item;
+            set => SetProperty(ref _item, value);
         }
 
-        public string Name
+        public Machine Machine
         {
-            get => name;
-            set => SetProperty(ref name, value);
-        }
-        public string Park
-        {
-            get => park;
-            set => SetProperty(ref park, value);
+            get => _machine;
+            set => SetProperty(ref _machine, value);
         }
 
-        public string Location
+        public Location Location
         {
-            get => location;
-            set => SetProperty(ref location, value);
+            get => _location;
+            set => SetProperty(ref _location, value);
         }
 
         public double Latitude
@@ -71,26 +75,81 @@ namespace DWPennyFinder.ViewModels
 
         private async void OnSave()
         {
+            //var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            //if (status == PermissionStatus.Granted)
+            //{
+            //    var locationGPS = await Geolocation.GetLocationAsync();
+            //    var newItem = new ItemDetail()
+            //    {
+            //        //item = Guid.NewGuid().ToString(),
+            //        item = new Item() {
+            //            name = name,
+            //            hasItem = false,
+            //        machine = machine,
+            //        location = location,
+            //        Latitude = locationGPS.Latitude,
+            //        Longitude = locationGPS.Longitude
+            //    };
+
+            //    await App.Database.SaveItemAsync(newItem);
+
+            //    // This will pop the current page off the navigation stack
+            //    await Navigation.PopModalAsync();
+            //}
+        }
+
+
+        private async Task SaveItemDetailAsync()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             if (status == PermissionStatus.Granted)
             {
-                var location = await Geolocation.GetLocationAsync();
-                var newItem = new Item()
+                try
                 {
-                    itemId = Guid.NewGuid().ToString(),
-                    Name = Name,
-                    Park = Park,
-                    Location = Location,
-                    Latitude = location.Latitude,
-                    Longitude = location.Longitude
-                };
-
-                await App.Database.SaveItemAsync(newItem);
-
-                // This will pop the current page off the navigation stack
-                await Navigation.PopModalAsync();
+                    var itemDetail = new ItemDetail
+                    {
+                        item = Item,
+                        machine = Machine,
+                        location = Location
+                    };
+                    await App.Database.SaveItemDetailAsync(itemDetail);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+                finally
+                {
+                    IsBusy = false;
+                }
             }
         }
 
+        private async Task DeleteItemDetailAsync()
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
+            try
+            {
+                await App.Database.DeleteItemAsync(Item);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
     }
 }
+

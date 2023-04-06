@@ -18,7 +18,9 @@ namespace DWPennyFinder.iOS
 
         public string Location { get; set; }
 
-        public string Park { get; set; }
+        public string Machine { get; set; }
+
+        public int MachineID { get; set; }
 
         public CustomMKAnnotationView(IMKAnnotation annotation, string id)
             : base(annotation, id){

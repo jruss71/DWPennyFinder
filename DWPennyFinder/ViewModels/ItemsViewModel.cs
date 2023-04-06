@@ -6,16 +6,15 @@ using DWPennyFinder.Models;
 using DWPennyFinder.Views;
 using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace DWPennyFinder.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        private ItemDetail  _selectedItem;
 
-        public ObservableCollection<Item> Items { get; }
-        public ICommand LoadItemsCommand { get; }
+        public ObservableCollection<ItemDetail> Items { get; }
+      
         public ICommand AddItemCommand { get; }
         public ICommand ItemTapped { get; }
 
@@ -25,22 +24,17 @@ namespace DWPennyFinder.ViewModels
         public string Location { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public bool IsSelected { get; set; }
-
         public INavigation Navigation { get; set; }
-        public bool IsCheckboxListVisible { get; set; }
 
         public ObservableCollection<Item> CheckBoxItems { get; set; }
-        
 
         public ItemsViewModel()
         {
             Title = "Browse 100th Pennies";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            ItemTapped = new Command<Item>(OnItemSelected);
-            AddItemCommand = new Command(OnAddItem);
+            Items = new ObservableCollection<ItemDetail>();
             CheckBoxItems = new ObservableCollection<Item>();
+            ItemTapped = new Command<ItemDetail>(OnItemSelected);
+            AddItemCommand = new Command(OnAddItem);
         }
 
         public async Task ExecuteLoadItemsCommand()
@@ -49,12 +43,20 @@ namespace DWPennyFinder.ViewModels
 
             try
             {
+
                 Items.Clear();
                 var items = await App.Database.GetItemsAsync();
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    var machine = await App.Database.GetMachineByIdAsync(item.machineId);
+                    var location = await App.Database.GetLocationAsync(machine.locationId);
 
+                    Items.Add(new ItemDetail
+                    {
+                        item = item,
+                        machine = machine,
+                        location = location
+                    }); ;
                 }
             }
             catch (Exception ex)
@@ -73,7 +75,7 @@ namespace DWPennyFinder.ViewModels
             SelectedItem = null;
         }
 
-        public Item SelectedItem
+        public ItemDetail SelectedItem
         {
             get => _selectedItem;
             set
@@ -88,22 +90,22 @@ namespace DWPennyFinder.ViewModels
             await Navigation.PushAsync(new NewItemPage());
         }
 
-        async void OnItemSelected(Item item)
+        async void OnItemSelected(ItemDetail item)
         {
             if (item == null)
                 return;
+
 
             var mapPage = new MapPage();
             mapPage.BindingContext = item;
             await Navigation.PushAsync(mapPage);
 
         }
-
-        public async Task CheckBoxItemsByLocation(string location)
+        public async Task CheckBoxItemsForMachine(int machine)
         {
             CheckBoxItems.Clear();
 
-            var items = await App.Database.GetItemsByLocation(location);
+            var items = await App.Database.GetItemsByMachineAsync(machine);
             foreach (var item in items)
             {
                 CheckBoxItems.Add(item);

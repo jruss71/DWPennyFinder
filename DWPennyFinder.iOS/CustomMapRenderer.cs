@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CoreGraphics;
+using CustomRenderer;
 using CustomRenderer.iOS;
 using DWPennyFinder;
 using DWPennyFinder.iOS;
@@ -8,13 +10,12 @@ using DWPennyFinder.Views;
 using Foundation;
 using MapKit;
 using Rg.Plugins.Popup.Services;
-using Rg.Plugins.Popup.Extensions;
 using UIKit;
+using Xamarin;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
 using Xamarin.Forms.Platform.iOS;
-using WebKit;
 
 [assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
 namespace CustomRenderer.iOS
@@ -48,18 +49,7 @@ namespace CustomRenderer.iOS
                 nativeMap.CalloutAccessoryControlTapped += OnCalloutAccessoryControlTapped;
                 nativeMap.DidSelectAnnotationView += OnDidSelectAnnotationView;
             }
-            if (Control != null)
-            {
-                var map = Control as MKMapView;
-                map.DidDeselectAnnotationView += (object sender, MKAnnotationViewEventArgs eventArgs) =>
-                {
-                    foreach (var anno in ((MKMapView)sender).Annotations)
-                    {
-                        // ((MKMapView)sender).SelectAnnotation(anno, true);
-                    }
-                };
-                
-            }
+           
         }
 
         protected override MKAnnotationView GetViewForAnnotation(MKMapView mapView, IMKAnnotation annotation)
@@ -70,7 +60,10 @@ namespace CustomRenderer.iOS
                 return null;
             customPins = formsMap.CustomPins;
             var customPin = GetCustomPin(annotation as MKPointAnnotation);
-          
+            if (customPin == null)
+            {
+                throw new Exception("Custom pin not found");
+            }
 
             annotationView = mapView.DequeueReusableAnnotation(customPin.Name);
             if (annotationView == null)
@@ -79,11 +72,13 @@ namespace CustomRenderer.iOS
                 annotationView = new CustomMKAnnotationView(annotation, customPin.Name);
                 annotationView.Image = UIImage.FromFile("pin.png");
                 annotationView.CalloutOffset = new CGPoint(0, 0);
+                //annotationView.LeftCalloutAccessoryView = new UIImageView(UIImage.FromFile("monkey.png"));
                 annotationView.RightCalloutAccessoryView = UIButton.FromType(UIButtonType.DetailDisclosure);
 
                 ((CustomMKAnnotationView)annotationView).Name = customPin.Name;
                 ((CustomMKAnnotationView)annotationView).Location = customPin.Location;
-                ((CustomMKAnnotationView)annotationView).Park = customPin.Park;
+                ((CustomMKAnnotationView)annotationView).Machine = customPin.Machine;
+                ((CustomMKAnnotationView)annotationView).MachineID = customPin.MachineID;
             }
             annotationView.CanShowCallout = true;
             configureDetailView(annotationView);
@@ -95,9 +90,16 @@ namespace CustomRenderer.iOS
             int height = 100;
 
             var snapshotView = new UIView();
+            snapshotView.TranslatesAutoresizingMaskIntoConstraints = false;
+            NSDictionary views = NSDictionary.FromObjectAndKey(snapshotView, new NSString("snapshotView"));
+            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[snapshotView(250)]", new NSLayoutFormatOptions(), null, views));
+            snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:[snapshotView(100)]", new NSLayoutFormatOptions(), null, views));
+
             var options = new MKMapSnapshotOptions();
             options.Size = new CGSize(width, height);
             options.MapType = MKMapType.SatelliteFlyover;
+          
+
             var snapshotter = new MKMapSnapshotter(options);
             snapshotter.Start((snapshot, error) =>
             {
@@ -107,43 +109,29 @@ namespace CustomRenderer.iOS
                     UILabel label2 = new UILabel();
                     UILabel label3 = new UILabel();
 
-                    label.Text = ((CustomMKAnnotationView)annotationView).Park;
-                    label2.Text = ((CustomMKAnnotationView)annotationView).Location;
+
+                    label.Text = ((CustomMKAnnotationView)annotationView).Location;
+                    label2.Text = ((CustomMKAnnotationView)annotationView).Machine;
                     label3.Text = ((CustomMKAnnotationView)annotationView).Name;
                     label3.LineBreakMode = UILineBreakMode.WordWrap;
                     label3.Lines = 0;
-
-                    int numLines = label3.Text.Split('\n').Length;
-                    var snapshotHeight =0;
-                    if(numLines != 4)
-                    {
-                     
-                        snapshotHeight = 75;
-                    }
-                    else
-                    {
-                        snapshotHeight = 100;
-                    }
-
-                    snapshotView.TranslatesAutoresizingMaskIntoConstraints = false;
-                    NSDictionary views = NSDictionary.FromObjectAndKey(snapshotView, new NSString("snapshotView"));
-                    snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:[snapshotView(250)]", new NSLayoutFormatOptions(), null, views));
-                    snapshotView.AddConstraints(NSLayoutConstraint.FromVisualFormat($"V:[snapshotView({snapshotHeight})]", new NSLayoutFormatOptions(), null, views));
-
-          
+                    
                     label.Frame = new CGRect(0, 0, 250, 20);
                     label2.Frame = new CGRect(0, 15, 250, 20);
                     label3.Frame = new CGRect(0, 25, 250, 70);
+                    // Add your custom controls here
 
                     label.TextAlignment = UITextAlignment.Left;
                     label2.TextAlignment = UITextAlignment.Left;
                     label3.TextAlignment = UITextAlignment.Left;
 
 
+                    //label.Font = UIFont.SystemFontOfSize(16);
                     label.Font = UIFont.BoldSystemFontOfSize(16);
                     label2.Font = UIFont.SystemFontOfSize(14);
                     label3.Font = UIFont.SystemFontOfSize(12);
 
+                    //snapshotView.AddSubviews(label, label2, label3, uIButton);
                     snapshotView.AddSubviews(label, label2, label3);
                 }
             });
@@ -155,9 +143,9 @@ namespace CustomRenderer.iOS
         {
             CustomMKAnnotationView customView = e.View as CustomMKAnnotationView;
             ItemsViewModel viewModel = new ItemsViewModel();
-            if (!(customView.Location == null))
+            if (!(customView.Machine == null))
             {
-                viewModel.CheckBoxItemsByLocation(customView.Location);
+                await viewModel.CheckBoxItemsForMachine(customView.MachineID);
                 var page = new CheckBoxContentPage(viewModel.CheckBoxItems);
                 await PopupNavigation.Instance.PushAsync(page);
 
