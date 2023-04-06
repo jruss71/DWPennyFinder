@@ -19,7 +19,7 @@
             Maximum="20"
             Minimum="10"
             ValueChanged="OnSliderValueChanged" />
-        <Grid VerticalOptions="End" >
+        <Grid VerticalOptions="End" Padding="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />

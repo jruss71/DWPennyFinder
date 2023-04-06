@@ -17,36 +17,35 @@
                HasBackgroundAnimation="True"/>
     </rg:PopupPage.Animation>
     
-    <StackLayout
-        Padding="0"
-        VerticalOptions="EndAndExpand"
-        HorizontalOptions="FillAndExpand"
-        >
-        <Frame HasShadow="True"
-           CornerRadius="20" HeightRequest="300"
-           >
+    <StackLayout Padding="0" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand">
+        <Frame HasShadow="True" CornerRadius="20" HeightRequest="300">
             <StackLayout>
-            <ListView x:Name="listView">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Name}" Grid.Column="0"/>
-                                <CheckBox Color="#886eb6" IsChecked="{Binding IsSelected}"  CheckedChanged="CheckedDone"  Grid.Column="1"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>  
-      <Button
-            Clicked="OnClose"
-            Text="Close"
-            TextColor="White" />
-    </StackLayout>
+                <Grid MinimumHeightRequest="50" VerticalOptions="CenterAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Pennies" Grid.Column="0"/>
+                    <Label Text="Collected" Grid.Column="1"/>
+                </Grid>
+                <ListView x:Name="listView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="{Binding Name}" Grid.Column="0"  VerticalOptions="Center"/>
+                                    <CheckBox Color="#886eb6" IsChecked="{Binding IsSelected}"  CheckedChanged="CheckedDone"  Grid.Column="1"  VerticalOptions="Center"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>  
+                <Button Clicked="OnClose" Text="Close" TextColor="White" />
+            </StackLayout>
         </Frame>
     </StackLayout>
 </rg:PopupPage>
