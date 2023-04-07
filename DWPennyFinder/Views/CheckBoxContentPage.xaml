@@ -38,7 +38,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Text="{Binding Name}" Grid.Column="0"  VerticalOptions="Center"/>
-                                    <CheckBox Color="#886eb6" IsChecked="{Binding IsSelected}"  CheckedChanged="CheckedDone"  Grid.Column="1"  VerticalOptions="Center"/>
+                                    <CheckBox Color="#886eb6" IsChecked="{Binding Collected}"  CheckedChanged="CheckedDone"  Grid.Column="1"  VerticalOptions="Center"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

@@ -6,6 +6,7 @@ using DWPennyFinder.Models;
 using DWPennyFinder.Views;
 using System;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace DWPennyFinder.ViewModels
 {
@@ -19,7 +20,14 @@ namespace DWPennyFinder.ViewModels
         public ICommand ItemTapped { get; }
         public ICommand ItemCollected { get; }
         public ICommand ItemRemoved { get; }
-        public ICommand DeleteCommand { get; }
+        public ICommand RefreshCommand { get; }
+
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set => SetProperty(ref _isRefreshing, value);
+        }
 
 
         public string Id { get; set; }
@@ -41,14 +49,15 @@ namespace DWPennyFinder.ViewModels
             AddItemCommand = new Command(OnAddItem);
             ItemCollected = new Command<ItemDetail>(OnItemCollected);
             ItemRemoved = new Command<ItemDetail>(OnItemRemoved);
-            DeleteCommand = new Command<ItemDetail>(OnDeleteCommand);
+            RefreshCommand = new Command(async () =>
+            {
+                IsRefreshing = true;
+                await ExecuteLoadItemsCommand();
+                IsRefreshing = false;
+            });
+
         }
 
-        public void OnDeleteCommand(ItemDetail itemDetail)
-        {
-            Console.WriteLine("Delete Fired");
-
-        }
 
         public async Task ExecuteLoadItemsCommand()
         {
@@ -61,7 +70,7 @@ namespace DWPennyFinder.ViewModels
                 var items = await App.Database.GetItemsAsync();
                 foreach (var item in items)
                 {
-                    var machine = await App.Database.GetMachineByIdAsync(item.machineId);
+                    var machine = await App.Database.GetMachineByIdAsync(item.MachineId);
                     var location = await App.Database.GetLocationAsync(machine.locationId);
 
                     Items.Add(new ItemDetail
@@ -79,14 +88,17 @@ namespace DWPennyFinder.ViewModels
             finally
             {
                 IsBusy = false;
+                
             }
         }
 
         public void OnAppearing()
         {
-            IsBusy = true;
             SelectedItem = null;
         }
+
+       
+
 
         public ItemDetail SelectedItem
         {
@@ -102,6 +114,7 @@ namespace DWPennyFinder.ViewModels
         {
             await Navigation.PushAsync(new NewItemPage());
         }
+
         private async void OnItemCollected(ItemDetail itemDetail)
         {
             if (itemDetail == null)
@@ -111,6 +124,7 @@ namespace DWPennyFinder.ViewModels
 
             // save the item to the database
             await App.Database.SaveItemAsync(itemDetail.item);
+            OnPropertyChanged(nameof(Item.Collected));
 
         }
         private async void OnItemRemoved(ItemDetail itemDetail)
@@ -123,6 +137,9 @@ namespace DWPennyFinder.ViewModels
 
             // save the item to the database
             await App.Database.SaveItemAsync(itemDetail.item);
+            OnPropertyChanged(nameof(Item.Collected));
+
+
 
         }
         async void OnItemSelected(ItemDetail item)
@@ -147,5 +164,6 @@ namespace DWPennyFinder.ViewModels
             }
         }
 
+       
     }
 }

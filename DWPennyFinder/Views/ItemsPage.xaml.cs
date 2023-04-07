@@ -7,6 +7,8 @@ using DWPennyFinder.Views;
 using System.Globalization;
 using DWPennyFinder.Converters;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace DWPennyFinder.Views
 {
@@ -20,14 +22,24 @@ namespace DWPennyFinder.Views
             _viewModel.Navigation = Navigation;
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
+            _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
 
             LoadItems();
+           
+        }
+        private void OnItemsViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsCollected")
+            {
+                Console.WriteLine("Need to refresh the view here");
+            }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
+            _viewModel.ExecuteLoadItemsCommand();
 
         }
 
@@ -35,6 +47,16 @@ namespace DWPennyFinder.Views
         {
             await _viewModel.ExecuteLoadItemsCommand();
         }
+
+        private async void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_viewModel.SelectedItem.item.Collected))
+            {
+                await _viewModel.ExecuteLoadItemsCommand();
+                //ItemsListView.RefreshItem(_viewModel.SelectedItem.item.Id);
+            }
+        }
+       
     }
 
     

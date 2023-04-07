@@ -91,7 +91,7 @@ namespace DWPennyFinder.Data
         public Task<List<Item>> GetItemsByMachineAsync(int machineId)
         {
             return _database.Table<Item>()
-                .Where(item => item.machineId == machineId)
+                .Where(item => item.MachineId == machineId)
                 .ToListAsync();
         }
 

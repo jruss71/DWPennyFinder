@@ -13,7 +13,7 @@
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <RefreshView x:DataType="local:ItemsViewModel" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
         <CollectionView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
@@ -21,17 +21,20 @@
                
              <DataTemplate>
                 <SwipeView>
-                    <SwipeView.LeftItems>
+                    <SwipeView.RightItems>
                         <SwipeItems>
-                            <SwipeItem
-                            Text="Delete"
-                            BackgroundColor="Purple"
-                            IconImageSource="insert-coin48.png"
-                            Command="{Binding DeleteCommand}"
-                            CommandParameter="{Binding .}"                            
-                            />
-                        </SwipeItems>
-                    </SwipeView.LeftItems>
+                            <SwipeItem Text="Collect"
+                                BackgroundColor="#886EB6"
+                                IconImageSource="insert-coin48.png"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemCollected}"		
+                                CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}"/>
+                            <SwipeItem Text="Delete"
+                                BackgroundColor="Gray"
+                                IconImageSource="undo48.png"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemRemoved}"		
+                                CommandParameter="{Binding Source={RelativeSource Self}, Path=BindingContext}" />                         
+                            </SwipeItems>
+                    </SwipeView.RightItems>
                         <ContentView Padding="10" x:DataType="model:ItemDetail">
                         <Grid>
                             <Grid.ColumnDefinitions>

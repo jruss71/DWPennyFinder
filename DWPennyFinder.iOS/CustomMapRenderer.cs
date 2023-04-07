@@ -77,9 +77,9 @@ namespace CustomRenderer.iOS
                     Convert.ToInt32(hexColor.Substring(5, 2), 16)
                 );
 
-                //UIButton infoButton = UIButton.FromType(UIButtonType.DetailDisclosure);
-                UIButton infoButton = UIButton.FromType(UIButtonType.System);
-                infoButton.SetTitle("Collect", UIControlState.Normal);
+                UIButton infoButton = UIButton.FromType(UIButtonType.DetailDisclosure);
+                //UIButton infoButton = UIButton.FromType(UIButtonType.System);
+                //infoButton.SetTitle("Collect", UIControlState.Normal);
 
                 infoButton.TintColor = uiColor;
 
