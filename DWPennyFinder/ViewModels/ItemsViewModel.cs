@@ -34,7 +34,40 @@ namespace DWPennyFinder.ViewModels
             get => _isRefreshing;
             set => SetProperty(ref _isRefreshing, value);
         }
+        private string _selectedFilter;
+        private string _selectedSort;
 
+        // Store the last selected filter and sort button information
+        private string _lastSelectedFilter;
+        private string _lastSelectedSort;
+
+        public string SelectedFilter
+        {
+            get { return _selectedFilter; }
+            set
+            {
+                if (_selectedFilter != value)
+                {
+                    _selectedFilter = value;
+                    OnPropertyChanged(nameof(SelectedFilter));
+                    UpdateLastSelectedFilter(value);
+                }
+            }
+        }
+
+        public string SelectedSort
+        {
+            get { return _selectedSort; }
+            set
+            {
+                if (_selectedSort != value)
+                {
+                    _selectedSort = value;
+                    OnPropertyChanged(nameof(SelectedSort));
+                    UpdateLastSelectedSort(value);
+                }
+            }
+        }
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -163,7 +196,29 @@ namespace DWPennyFinder.ViewModels
                 OnItemSelected(value);
             }
         }
+        // Update the last selected sort information
+        private void UpdateLastSelectedSort(string sort)
+        {
+            _lastSelectedSort = sort;
+        }
 
+        // Update the last selected sort information
+        private void UpdateLastSelectedFilter(string filter)
+        {
+            _lastSelectedSort = filter;
+        }
+
+        // Get the last selected filter
+        public string GetLastSelectedFilter()
+        {
+            return _lastSelectedFilter;
+        }
+
+        // Get the last selected sort
+        public string GetLastSelectedSort()
+        {
+            return _lastSelectedSort;
+        }
         private async void OnAddItem(object obj)
         {
             await Navigation.PushAsync(new NewItemPage());
