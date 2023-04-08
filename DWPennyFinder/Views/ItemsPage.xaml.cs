@@ -9,12 +9,21 @@ using DWPennyFinder.Converters;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Reflection;
+using Rg.Plugins.Popup.Services;
+using System.Windows.Input;
 
 namespace DWPennyFinder.Views
 {
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel _viewModel;
+        public ICommand FilterItemCommand { get; }
+        public ICommand SortItemCommand { get; }
+
+        public ItemsViewModel _viewModel;
+        // Public property to store the selected filter
+        public string SelectedFilter { get; set; }
+
+
         public ItemsPage()
         {
             InitializeComponent();
@@ -23,10 +32,27 @@ namespace DWPennyFinder.Views
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
             _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
-
+            FilterItemCommand = new Command<ItemDetail>(OnFilterItem);
+            SortItemCommand = new Command<ItemDetail>(OnSortItem);
             LoadItems();
-           
+
+
         }
+        private async void OnFilterItem(object obj)
+        {
+            Console.WriteLine("itemfilterbuttonclicked");
+            FilterPage filterPage = new FilterPage(this);
+            await PopupNavigation.Instance.PushAsync(filterPage);
+        }
+
+
+        private async void OnSortItem(object obj)
+        {
+            Console.WriteLine("itemsortbuttonclicked");
+            SortPage sortPage = new SortPage(this);
+            await PopupNavigation.Instance.PushAsync(new SortPage());
+        }
+
         private void OnItemsViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "IsCollected")
@@ -35,13 +61,15 @@ namespace DWPennyFinder.Views
             }
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-            _viewModel.ExecuteLoadItemsCommand();
-
+            Console.WriteLine(SelectedFilter);
+           
         }
+
+    
 
         private async Task LoadItems()
         {

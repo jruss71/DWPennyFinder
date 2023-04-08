@@ -7,20 +7,25 @@ using DWPennyFinder.Views;
 using System;
 using System.Diagnostics;
 using System.ComponentModel;
+using Rg.Plugins.Popup.Services;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace DWPennyFinder.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
         private ItemDetail  _selectedItem;
-
+        private Collection<ItemDetail> SourceItems { get; }
         public ObservableCollection<ItemDetail> Items { get; }
       
         public ICommand AddItemCommand { get; }
+
         public ICommand ItemTapped { get; }
         public ICommand ItemCollected { get; }
         public ICommand ItemRemoved { get; }
         public ICommand RefreshCommand { get; }
+        public ICommand AltFilterCommand { get; }
 
         private bool _isRefreshing;
         public bool IsRefreshing
@@ -44,9 +49,11 @@ namespace DWPennyFinder.ViewModels
         {
             Title = "Browse 100th Pennies";
             Items = new ObservableCollection<ItemDetail>();
+            SourceItems = new Collection<ItemDetail>();
             CheckBoxItems = new ObservableCollection<Item>();
             ItemTapped = new Command<ItemDetail>(OnItemSelected);
             AddItemCommand = new Command(OnAddItem);
+            AltFilterCommand = new Command(OnFilterCommand);
             ItemCollected = new Command<ItemDetail>(OnItemCollected);
             ItemRemoved = new Command<ItemDetail>(OnItemRemoved);
             RefreshCommand = new Command(async () =>
@@ -55,7 +62,7 @@ namespace DWPennyFinder.ViewModels
                 await ExecuteLoadItemsCommand();
                 IsRefreshing = false;
             });
-
+           
         }
 
 
@@ -73,12 +80,14 @@ namespace DWPennyFinder.ViewModels
                     var machine = await App.Database.GetMachineByIdAsync(item.MachineId);
                     var location = await App.Database.GetLocationAsync(machine.locationId);
 
-                    Items.Add(new ItemDetail
+                    ItemDetail itemDetail = new ItemDetail
                     {
                         item = item,
                         machine = machine,
                         location = location
-                    }); ;
+                    };
+                    SourceItems.Add(itemDetail);
+                    Items.Add(itemDetail); 
                 }
             }
             catch (Exception ex)
@@ -114,6 +123,16 @@ namespace DWPennyFinder.ViewModels
         {
             await Navigation.PushAsync(new NewItemPage());
         }
+
+        private async void OnFilterCommand(object obj)
+        {
+            //await Navigation.PushAsync(new NewItemPage());
+            Console.Write("Alt Filter Command here");
+            FilterPage filterPage = new FilterPage(this);
+            await PopupNavigation.Instance.PushAsync(filterPage);
+
+        }
+
 
         private async void OnItemCollected(ItemDetail itemDetail)
         {
@@ -163,7 +182,60 @@ namespace DWPennyFinder.ViewModels
                 CheckBoxItems.Add(item);
             }
         }
+        public void ClearFilter()
+        {
+            // Clear any applied filters
+            Items.Clear();
 
-       
+            // Reload all items
+            ExecuteLoadItemsCommand();
+        }
+
+        public void FilterItemsByLocation(string location)
+        {
+            Console.WriteLine("filter items by location");
+
+            IEnumerable<ItemDetail>  itemsByLocation = SourceItems.Where(itemDetail => itemDetail.location.name == location);
+            Console.WriteLine("Filtered items count: " + itemsByLocation.Count());
+            Console.WriteLine("Unfiltered items count: " + Items.Count());
+            //Items.Clear();
+            foreach (var item in SourceItems)
+            {
+                if (!itemsByLocation.Contains(item))
+                {
+                    Items.Remove(item);   
+                }
+                else if (!Items.Contains(item))
+                {
+                    Items.Add(item);
+                }
+            }
+        }
+
+        public void FilterItemsByResorts()
+        {
+            var itemsByResorts = Items.Where(itemDetail =>
+                !itemDetail.location.name.Equals("Epcot") &&
+                !itemDetail.location.name.Equals("Animal Kingdom") &&
+                !itemDetail.location.name.Equals("Magic Kingdom") &&
+                !itemDetail.location.name.Equals("Hollywood Studios") &&
+                !itemDetail.location.name.Equals("Disney Springs")
+            );
+
+            if (itemsByResorts != null)
+            {
+                Items.Clear();
+                foreach (var item in itemsByResorts)
+                {
+                    Items.Add(item);
+                }
+            }
+        }
+
+
+
+
+
+
     }
 }

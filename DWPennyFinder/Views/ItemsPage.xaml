@@ -5,21 +5,27 @@
              xmlns:local="clr-namespace:DWPennyFinder.ViewModels"  
              xmlns:model="clr-namespace:DWPennyFinder.Models"  
              x:Name="BrowseItemsPage">
-
+   
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Filter" Command="{Binding AltFilterCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Sort" Command="{Binding SortItemCommand, Source={x:Reference BrowseItemsPage}}" Order="Secondary" />
     </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+    <StackLayout>
+         <Label Text="{Binding FilterItemCommand, Source={x:Reference BrowseItemsPage}}" />
+         <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+
         <CollectionView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
                
              <DataTemplate>
+                   
                 <SwipeView>
                     <SwipeView.RightItems>
                         <SwipeItems>
@@ -77,5 +83,8 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
     </RefreshView>
+    </StackLayout>
+   
+   
 </ContentPage>
 

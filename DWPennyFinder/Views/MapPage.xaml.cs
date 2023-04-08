@@ -18,7 +18,6 @@ namespace DWPennyFinder.Views
         private ItemDetail itemDetail;
         private ObservableCollection<ItemDetail> items;
         private ItemsViewModel _viewModel;
-        //private CheckBoxContentView _checkboxView;
 
         private readonly double defaultZoomLevel = 16;
 
@@ -30,13 +29,13 @@ namespace DWPennyFinder.Views
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
             slider.Value = defaultZoomLevel;
-            customMap.MapClicked += CustomMap_MapClicked;
+            //customMap.MapClicked += CustomMap_MapClicked;
         }
 
-        private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
-        {
+       // private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
+        //{
             //checkboxList.IsVisible = false;
-        }
+       // }
 
         private async Task LoadItems()
         {

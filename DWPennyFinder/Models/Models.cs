@@ -7,11 +7,13 @@ using Xamarin.Forms.Maps;
 namespace DWPennyFinder.Models
 {
 
-    public class ItemDetail
+    public class ItemDetail : INotifyPropertyChanged
     {
         public Item item { get; set; }
         public Machine machine { get; set; }
         public Location location { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public class Location
