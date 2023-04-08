@@ -38,7 +38,6 @@ namespace DWPennyFinder.Views
         private async void OnAnimalKingdomClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Animal Kingdom";
-            //_itemsPage.SelectedFilter = SelectedFilter;
             _itemsViewModel.FilterItemsByLocation(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
@@ -47,7 +46,6 @@ namespace DWPennyFinder.Views
         private async void OnEpcotClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Epcot";
-            //_itemsPage.SelectedFilter = SelectedFilter;
             _itemsViewModel.FilterItemsByLocation(SelectedFilter);            
             await PopupNavigation.Instance.PopAsync();
         }
@@ -55,29 +53,36 @@ namespace DWPennyFinder.Views
         private async void OnMagicKingdomClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Magic Kingdom";
+            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
 
         private async void OnHollywoodStudiosClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Hollywood Studios";
+            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
 
         private async void OnDisneySpringsClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Disney Springs";
+            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
 
         private async void OnResortsClicked(object sender, EventArgs e)
         {
             SelectedFilter = "Resorts";
+            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
         private async void OnClearFilterClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("clear");
+            SelectedFilter = "All";
+            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
+            await PopupNavigation.Instance.PopAsync();
+
         }
         private async void OnClose(object sender, EventArgs e)
         {

@@ -55,12 +55,12 @@ namespace DWPennyFinder.Views
 
                 var pin = new CustomPin
                 {
-                    Position = itemDetail.machine.pinPosition, //pinPosition,
-                    Name = itemDetail.item.Name,
+                    Position = itemDetail.Machine.pinPosition, //pinPosition,
+                    Name = itemDetail.Item.Name,
                     Label = string.Empty,
-                    Machine = itemDetail.machine.name,
-                    Location = itemDetail.location.name,
-                    MachineID = itemDetail.machine.Id
+                    Machine = itemDetail.Machine.name,
+                    Location = itemDetail.Location.name,
+                    MachineID = itemDetail.Machine.Id
                 };
                 customMap.CustomPins = new List<CustomPin> { pin };
                 customMap.Pins.Add(pin);
@@ -86,39 +86,39 @@ namespace DWPennyFinder.Views
                 // This is the list view so lets add pins for the full list
                 var itemDetails = new ObservableCollection<ItemDetail>(
                     vmList.Items
-                    .OrderBy(item => item.location.name)
-                    .ThenBy(item => item.item.Name));
+                    .OrderBy(item => item.Location.name)
+                    .ThenBy(item => item.Item.Name));
 
                 // we initialize the PrevLocation for our first item so it won't automatically be seen as a new "group"
                 if (itemDetails.Count > 0)
                 {
                     previousItem = itemDetails.First();
-                    String pennyName = previousItem.item.Name;
+                    String pennyName = previousItem.Item.Name;
                     foreach (ItemDetail itemDetail in itemDetails)
                     {
-                        if (itemDetail.machine.name != previousItem.machine.name)
+                        if (itemDetail.Machine.name != previousItem.Machine.name)
                         {
                             var pin = new CustomPin
                             {
-                                Position = previousItem.machine.pinPosition,
+                                Position = previousItem.Machine.pinPosition,
                                 Name = pennyName,
-                                Machine = previousItem.machine.name,
-                                Location = previousItem.location.name,
-                                MachineID = previousItem.machine.Id,
+                                Machine = previousItem.Machine.name,
+                                Location = previousItem.Location.name,
+                                MachineID = previousItem.Machine.Id,
                                 Label = string.Empty,
                                 Type = PinType.Place
 
                             };
-                            pennyName = itemDetail.item.Name;
+                            pennyName = itemDetail.Item.Name;
 
                             customMap.CustomPins.Add(pin);
                             customMap.Pins.Add(pin);
                         }
                         else
                         {
-                            if (previousItem.item.Name != itemDetail.item.Name)
+                            if (previousItem.Item.Name != itemDetail.Item.Name)
                             {
-                                pennyName += "\n" + itemDetail.item.Name;
+                                pennyName += "\n" + itemDetail.Item.Name;
                                 Console.WriteLine(pennyName);
                             }
                         }

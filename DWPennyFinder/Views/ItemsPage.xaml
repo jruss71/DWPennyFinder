@@ -1,22 +1,22 @@
 ﻿<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DWPennyFinder.Views.ItemsPage"
-             Title="{Binding Title}"
+             Title=""
              xmlns:local="clr-namespace:DWPennyFinder.ViewModels"  
              xmlns:model="clr-namespace:DWPennyFinder.Models"  
              x:Name="BrowseItemsPage">
    
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Filter" Command="{Binding AltFilterCommand}" Order="Secondary"/>
-        <ToolbarItem Text="Sort" Command="{Binding SortItemCommand, Source={x:Reference BrowseItemsPage}}" Order="Secondary" />
+        <ToolbarItem Command="{Binding AddItemCommand}" IconImageSource="add.png" Priority="5" Order="Secondary"/>
+        <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="2" Order="Secondary" />
+        <ToolbarItem Command="{Binding SortItemCommand}" IconImageSource="sort.png" Priority="3" Order="Secondary" />
     </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
     <StackLayout>
-         <Label Text="{Binding FilterItemCommand, Source={x:Reference BrowseItemsPage}}" />
+    
          <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
 
         <CollectionView x:Name="ItemsListView"
@@ -49,7 +49,7 @@
                             </Grid.ColumnDefinitions>
 
                             <StackLayout Padding="10" x:DataType="model:ItemDetail" Grid.Row="0">
-                                <Label Text="{Binding item.Name}" 
+                                <Label Text="{Binding Item.Name}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="16" />
@@ -58,15 +58,15 @@
                             FontSize="13" >
                                     <Label.Text>
                                         <MultiBinding Converter="{StaticResource LocationParkConverter}">
-                                            <Binding Path="location.name" />
-                                            <Binding Path="machine.name" />
+                                            <Binding Path="Location.name" />
+                                            <Binding Path="Machine.name" />
                                         </MultiBinding>
                                     </Label.Text>
                                 </Label>
 
                             </StackLayout>
 
-                            <Image Grid.Column="1" Source="mouse_30x30.png" IsVisible="{Binding item.Collected}" />
+                            <Image Grid.Column="1" Source="mouse_30x30.png" IsVisible="{Binding Item.Collected}" />
                         </Grid>
                         
                         

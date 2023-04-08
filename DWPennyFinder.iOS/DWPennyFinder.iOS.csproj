@@ -145,6 +145,9 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\152.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <BundleResource Include="Resources\filter.png" />
+    <BundleResource Include="Resources\sort.png" />
+    <BundleResource Include="Resources\add.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

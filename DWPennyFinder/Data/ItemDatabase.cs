@@ -115,35 +115,35 @@ namespace DWPennyFinder.Data
         public async Task SaveItemDetailAsync(ItemDetail itemDetail)
         {
             // Save or update the Location
-            if (itemDetail.location.Id == 0)
+            if (itemDetail.Location.Id == 0)
             {
-                await _database.InsertAsync(itemDetail.location); ;
+                await _database.InsertAsync(itemDetail.Location); ;
             }
             else
             {
-                await _database.UpdateAsync(itemDetail.location);
+                await _database.UpdateAsync(itemDetail.Location);
             }
 
             // Save or update the Machine and set its LocationId
-            itemDetail.machine.locationId = itemDetail.location.Id;
-            if (itemDetail.machine.Id == 0)
+            itemDetail.Machine.locationId = itemDetail.Location.Id;
+            if (itemDetail.Machine.Id == 0)
             {
-                await _database.InsertAsync(itemDetail.machine);
+                await _database.InsertAsync(itemDetail.Machine);
             }
             else
             {
-                await _database.UpdateAsync(itemDetail.machine);
+                await _database.UpdateAsync(itemDetail.Machine);
             }
 
             // Save or update the Item and set its MachineId
-            itemDetail.machine.locationId = itemDetail.location.Id;
-            if (itemDetail.item.Id == 0)
+            itemDetail.Machine.locationId = itemDetail.Location.Id;
+            if (itemDetail.Item.Id == 0)
             {
-                await _database.InsertAsync(itemDetail.item);
+                await _database.InsertAsync(itemDetail.Item);
             }
             else
             {
-                await _database.UpdateAsync(itemDetail.item);
+                await _database.UpdateAsync(itemDetail.Item);
             }
         }
 

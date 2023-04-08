@@ -113,9 +113,9 @@ namespace DWPennyFinder.ViewModels
                 {
                     var itemDetail = new ItemDetail
                     {
-                        item = Item,
-                        machine = Machine,
-                        location = Location
+                        Item = Item,
+                        Machine = Machine,
+                        Location = Location
                     };
                     await App.Database.SaveItemDetailAsync(itemDetail);
                 }

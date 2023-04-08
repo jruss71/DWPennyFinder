@@ -34,7 +34,7 @@ namespace DWPennyFinder.Views
             _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
             FilterItemCommand = new Command<ItemDetail>(OnFilterItem);
             SortItemCommand = new Command<ItemDetail>(OnSortItem);
-            LoadItems();
+            //LoadItems();
 
 
         }
@@ -65,8 +65,7 @@ namespace DWPennyFinder.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-            Console.WriteLine(SelectedFilter);
-           
+            LoadItems();
         }
 
     
@@ -78,10 +77,9 @@ namespace DWPennyFinder.Views
 
         private async void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_viewModel.SelectedItem.item.Collected))
+            if (e.PropertyName == nameof(_viewModel.SelectedItem.Item.Collected))
             {
                 await _viewModel.ExecuteLoadItemsCommand();
-                //ItemsListView.RefreshItem(_viewModel.SelectedItem.item.Id);
             }
         }
        

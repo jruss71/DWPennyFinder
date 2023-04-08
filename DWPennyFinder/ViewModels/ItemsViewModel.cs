@@ -10,17 +10,18 @@ using System.ComponentModel;
 using Rg.Plugins.Popup.Services;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace DWPennyFinder.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
         private ItemDetail  _selectedItem;
+        
         private Collection<ItemDetail> SourceItems { get; }
         public ObservableCollection<ItemDetail> Items { get; }
       
         public ICommand AddItemCommand { get; }
-
         public ICommand ItemTapped { get; }
         public ICommand ItemCollected { get; }
         public ICommand ItemRemoved { get; }
@@ -41,7 +42,11 @@ namespace DWPennyFinder.ViewModels
         public string Location { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string Filter = string.Empty;
+
+        public ItemDetail ItemDetail { get; set; }
         public INavigation Navigation { get; set; }
+        IEnumerable<ItemDetail> itemsByLocation;
 
         public ObservableCollection<Item> CheckBoxItems { get; set; }
 
@@ -62,33 +67,52 @@ namespace DWPennyFinder.ViewModels
                 await ExecuteLoadItemsCommand();
                 IsRefreshing = false;
             });
-           
+
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(ItemDetail))
+                {
+                    if (_selectedItem != null)
+                    {
+                        _selectedItem.PropertyChanged -= SelectedItem_PropertyChanged;
+                    }
+                    if (ItemDetail != null)
+                    {
+                        ItemDetail.PropertyChanged += SelectedItem_PropertyChanged;
+                    }
+                }
+            };
         }
-
-
         public async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
 
             try
             {
-
-                Items.Clear();
-                var items = await App.Database.GetItemsAsync();
-                foreach (var item in items)
+                if (Filter != string.Empty)
                 {
-                    var machine = await App.Database.GetMachineByIdAsync(item.MachineId);
-                    var location = await App.Database.GetLocationAsync(machine.locationId);
-
-                    ItemDetail itemDetail = new ItemDetail
-                    {
-                        item = item,
-                        machine = machine,
-                        location = location
-                    };
-                    SourceItems.Add(itemDetail);
-                    Items.Add(itemDetail); 
+                    FilterItemsByLocation(Filter);
                 }
+                else
+                {
+                    Items.Clear();
+                    var items = await App.Database.GetItemsAsync();
+                    foreach (var item in items)
+                    {
+                        var machine = await App.Database.GetMachineByIdAsync(item.MachineId);
+                        var location = await App.Database.GetLocationAsync(machine.locationId);
+
+                        ItemDetail itemDetail = new ItemDetail
+                        {
+                            Item = item,
+                            Machine = machine,
+                            Location = location
+                        };
+                        SourceItems.Add(itemDetail);
+                        Items.Add(itemDetail);
+                    }
+                }
+                
             }
             catch (Exception ex)
             {
@@ -106,7 +130,24 @@ namespace DWPennyFinder.ViewModels
             SelectedItem = null;
         }
 
-       
+        protected override void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            // Your custom implementation here
+
+            // Call the base implementation to raise the PropertyChanged event
+            base.RaisePropertyChanged(propertyName);
+        }
+
+        private void SelectedItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Handle the PropertyChanged event for the ItemDetail object here
+            // You can perform any necessary updates or actions based on the changes in the ItemDetail object
+            if (e.PropertyName == nameof(ItemDetail.Item))
+            {
+                // Perform updates based on the changes in the Item object
+                Console.Write("We need to reload from the DB here");
+            }
+        }
 
 
         public ItemDetail SelectedItem
@@ -126,8 +167,6 @@ namespace DWPennyFinder.ViewModels
 
         private async void OnFilterCommand(object obj)
         {
-            //await Navigation.PushAsync(new NewItemPage());
-            Console.Write("Alt Filter Command here");
             FilterPage filterPage = new FilterPage(this);
             await PopupNavigation.Instance.PushAsync(filterPage);
 
@@ -139,10 +178,10 @@ namespace DWPennyFinder.ViewModels
             if (itemDetail == null)
                 return;
             // update the Collected value
-            itemDetail.item.Collected = true;
+            itemDetail.Item.Collected = true;
 
             // save the item to the database
-            await App.Database.SaveItemAsync(itemDetail.item);
+            await App.Database.SaveItemAsync(itemDetail.Item);
             OnPropertyChanged(nameof(Item.Collected));
 
         }
@@ -152,10 +191,10 @@ namespace DWPennyFinder.ViewModels
                 return;
 
             // update the Collected value
-            itemDetail.item.Collected = false;
+            itemDetail.Item.Collected = false;
 
             // save the item to the database
-            await App.Database.SaveItemAsync(itemDetail.item);
+            await App.Database.SaveItemAsync(itemDetail.Item);
             OnPropertyChanged(nameof(Item.Collected));
 
 
@@ -182,23 +221,33 @@ namespace DWPennyFinder.ViewModels
                 CheckBoxItems.Add(item);
             }
         }
-        public void ClearFilter()
-        {
-            // Clear any applied filters
-            Items.Clear();
-
-            // Reload all items
-            ExecuteLoadItemsCommand();
-        }
-
+       
         public void FilterItemsByLocation(string location)
         {
-            Console.WriteLine("filter items by location");
 
-            IEnumerable<ItemDetail>  itemsByLocation = SourceItems.Where(itemDetail => itemDetail.location.name == location);
-            Console.WriteLine("Filtered items count: " + itemsByLocation.Count());
-            Console.WriteLine("Unfiltered items count: " + Items.Count());
-            //Items.Clear();
+            Filter = location;
+            if(location == "Resorts") {
+                itemsByLocation = SourceItems.Where(itemDetail =>
+                !new List<string> {
+                    "Disney Springs",
+                    "Animal Kingdom",
+                    "Magic Kingdom",
+                    "Epcot",
+                    "Hollywood Studios" }
+                .Contains(itemDetail.Location.name));
+                }
+            else if (location == "All")
+                {
+                    itemsByLocation = SourceItems;
+                }
+            else
+                {
+
+                    itemsByLocation = SourceItems
+                        .Where(itemDetail =>
+                        itemDetail.Location.name == location);
+                }
+            Items.Clear();
             foreach (var item in SourceItems)
             {
                 if (!itemsByLocation.Contains(item))
@@ -211,31 +260,6 @@ namespace DWPennyFinder.ViewModels
                 }
             }
         }
-
-        public void FilterItemsByResorts()
-        {
-            var itemsByResorts = Items.Where(itemDetail =>
-                !itemDetail.location.name.Equals("Epcot") &&
-                !itemDetail.location.name.Equals("Animal Kingdom") &&
-                !itemDetail.location.name.Equals("Magic Kingdom") &&
-                !itemDetail.location.name.Equals("Hollywood Studios") &&
-                !itemDetail.location.name.Equals("Disney Springs")
-            );
-
-            if (itemsByResorts != null)
-            {
-                Items.Clear();
-                foreach (var item in itemsByResorts)
-                {
-                    Items.Add(item);
-                }
-            }
-        }
-
-
-
-
-
 
     }
 }
