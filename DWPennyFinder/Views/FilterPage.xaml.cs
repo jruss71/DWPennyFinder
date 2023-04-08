@@ -18,6 +18,7 @@ namespace DWPennyFinder.Views
 
         // Public property to store the selected filter
         public string SelectedFilter { get; set; }
+        public string SelectedSort { get; set; }
         private ItemsPage _itemsPage;
         private ItemsViewModel _itemsViewModel;
 
@@ -42,6 +43,15 @@ namespace DWPennyFinder.Views
             SelectedFilter = ((Button)sender).Text;
             _itemsViewModel.FilterItems(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
+        }
+
+        private async void OnSortButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            SelectedSort = ((Button)sender).Text;
+            _itemsViewModel.SortItems(SelectedSort);
+
+            await PopupNavigation.Instance.PopAsync();
+
         }
     }
 

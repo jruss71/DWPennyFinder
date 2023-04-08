@@ -31,9 +31,8 @@ namespace DWPennyFinder.Views
             _viewModel.Navigation = Navigation;
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
-            _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
+           // _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
             FilterItemCommand = new Command<ItemDetail>(OnFilterItem);
-            SortItemCommand = new Command<ItemDetail>(OnSortItem);
             //LoadItems();
 
 
@@ -46,20 +45,14 @@ namespace DWPennyFinder.Views
         }
 
 
-        private async void OnSortItem(object obj)
-        {
-            Console.WriteLine("itemsortbuttonclicked");
-            SortPage sortPage = new SortPage(this);
-            await PopupNavigation.Instance.PushAsync(new SortPage());
-        }
 
-        private void OnItemsViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "IsCollected")
-            {
-                Console.WriteLine("Need to refresh the view here");
-            }
-        }
+        //private void OnItemsViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        //{
+        //    if (e.PropertyName == "IsCollected")
+        //    {
+        //        Console.WriteLine("Need to refresh the view here");
+        //    }
+        //}
 
         protected async override void OnAppearing()
         {

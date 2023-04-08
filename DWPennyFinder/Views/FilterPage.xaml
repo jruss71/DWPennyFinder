@@ -16,6 +16,7 @@ HasBackgroundAnimation="True"/>
 <StackLayout Padding="0" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand">
 
 <Frame HasShadow="True" CornerRadius="20" HeightRequest="300">
+            <ScrollView>
 <StackLayout>
 <Grid MinimumHeightRequest="50" VerticalOptions="CenterAndExpand">
 <Grid.ColumnDefinitions>
@@ -45,7 +46,39 @@ HasBackgroundAnimation="True"/>
 <Button Text="Uncollected" Clicked="OnFilterButtonClicked" Grid.Row="3" Grid.Column="1"/>
 <Button Text="Clear Filter" Clicked="OnFilterButtonClicked" Grid.Row="4" Grid.ColumnSpan="2" BackgroundColor="Gray" TextColor="White"/>
 </Grid>
+
+                <Grid Margin="10,20,10,10">
+<Grid.RowDefinitions>
+<RowDefinition Height="Auto" />
+<RowDefinition Height="Auto" />
+<RowDefinition Height="Auto" />
+</Grid.RowDefinitions>
+<Grid.ColumnDefinitions>
+<ColumnDefinition Width="*"/>
+<ColumnDefinition Width="*"/>
+</Grid.ColumnDefinitions>
+                    </Grid>
+                <Label Text="Sort" Grid.Row="5" Margin="0,20,0,10"/>
+<Grid Margin="10,0,10,10" Grid.Row="6">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Button Text="Name A-Z" Clicked="OnSortButtonClicked"/>
+    <Button Text="Name Z-A" Clicked="OnSortButtonClicked" Grid.Column="1"/>
+    <Button Text="Location A-Z" Clicked="OnSortButtonClicked" Grid.Row="1"/>
+    <Button Text="Location Z-A" Clicked="OnSortButtonClicked" Grid.Row="1" Grid.Column="1"/>
+    <Button Text="Collected - Uncollected" Clicked="OnSortButtonClicked" Grid.Row="2"/>
+    <Button Text="Uncollected - Collected" Clicked="OnSortButtonClicked" Grid.Row="2" Grid.Column="1"/>
+                        <Button Text="Clear Sort" Clicked="OnSortButtonClicked" Grid.Row="3" Grid.ColumnSpan="2" BackgroundColor="Gray" TextColor="White"/>
+
+</Grid>
 </StackLayout>
+            </ScrollView>
 </Frame>
 </StackLayout>
 </rg:PopupPage>

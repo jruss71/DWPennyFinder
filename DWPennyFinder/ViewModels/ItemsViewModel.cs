@@ -44,9 +44,12 @@ namespace DWPennyFinder.ViewModels
         public double Longitude { get; set; }
         public string Filter = string.Empty;
 
+        public string Sort = string.Empty;
         public ItemDetail ItemDetail { get; set; }
         public INavigation Navigation { get; set; }
         IEnumerable<ItemDetail> itemsByFilter;
+
+        IEnumerable<ItemDetail> itemsBySort;
 
         public ObservableCollection<Item> CheckBoxItems { get; set; }
 
@@ -93,6 +96,7 @@ namespace DWPennyFinder.ViewModels
                 {
                     FilterItems(Filter);
                 }
+              
                 else
                 {
                     Items.Clear();
@@ -267,6 +271,40 @@ namespace DWPennyFinder.ViewModels
                 {
                     Items.Add(item);
                 }
+            }
+        }
+        public void SortItems(string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "Name A-Z":
+                    itemsBySort = SourceItems.OrderBy(itemDetail => itemDetail.Item.Name);
+                    break;
+                case "Name Z-A":
+                    itemsBySort = SourceItems.OrderByDescending(itemDetail => itemDetail.Item.Name);
+                    break;
+                case "Location A-Z":
+                    itemsBySort = SourceItems.OrderBy(itemDetail => itemDetail.Location.name);
+                    break;
+                case "Location Z-A":
+                    itemsBySort = SourceItems.OrderByDescending(itemDetail => itemDetail.Location.name);
+                    break;
+                case "Collected - Uncollected":
+                    itemsBySort = SourceItems.OrderByDescending(itemDetail => itemDetail.Item.Collected);
+                    break;
+                case "Uncollected - Collected":
+                    itemsBySort = SourceItems.OrderBy(itemDetail => itemDetail.Item.Collected);
+                    break;
+                default:
+                    itemsBySort = SourceItems;
+                    break;
+            }
+
+            // Clear the Items collection and add the sorted items
+            Items.Clear();
+            foreach (var item in itemsBySort)
+            {
+                Items.Add(item);
             }
         }
 
