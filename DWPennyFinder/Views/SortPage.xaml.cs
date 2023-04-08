@@ -19,6 +19,11 @@ namespace DWPennyFinder.Views
             _itemsPage = itemsPage;
             InitializeComponent();
         }
+
+        void ButtonClicked(System.Object sender, System.EventArgs e)
+        {
+            Console.WriteLine("test");
+        }
     }
 }
 

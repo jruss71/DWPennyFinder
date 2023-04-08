@@ -13,7 +13,9 @@ namespace DWPennyFinder.Views
     public partial class FilterPage : PopupPage
     {
 
-        
+        private Button _previouslyClickedButton;
+
+
         // Public property to store the selected filter
         public string SelectedFilter { get; set; }
         private ItemsPage _itemsPage;
@@ -35,61 +37,12 @@ namespace DWPennyFinder.Views
             InitializeComponent();
         }
 
-        private async void OnAnimalKingdomClicked(object sender, EventArgs e)
+        private async void OnFilterButtonClicked(object sender, EventArgs e)
         {
-            SelectedFilter = "Animal Kingdom";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-        }
-
-
-        private async void OnEpcotClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "Epcot";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);            
-            await PopupNavigation.Instance.PopAsync();
-        }
-
-        private async void OnMagicKingdomClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "Magic Kingdom";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-        }
-
-        private async void OnHollywoodStudiosClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "Hollywood Studios";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-        }
-
-        private async void OnDisneySpringsClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "Disney Springs";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-        }
-
-        private async void OnResortsClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "Resorts";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-        }
-        private async void OnClearFilterClicked(object sender, EventArgs e)
-        {
-            SelectedFilter = "All";
-            _itemsViewModel.FilterItemsByLocation(SelectedFilter);
-            await PopupNavigation.Instance.PopAsync();
-
-        }
-        private async void OnClose(object sender, EventArgs e)
-        {
-            Console.WriteLine("close");
+            SelectedFilter = ((Button)sender).Text;
+            _itemsViewModel.FilterItems(SelectedFilter);
             await PopupNavigation.Instance.PopAsync();
         }
     }
 
 }
-

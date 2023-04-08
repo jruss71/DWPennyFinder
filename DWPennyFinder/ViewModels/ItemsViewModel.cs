@@ -46,7 +46,7 @@ namespace DWPennyFinder.ViewModels
 
         public ItemDetail ItemDetail { get; set; }
         public INavigation Navigation { get; set; }
-        IEnumerable<ItemDetail> itemsByLocation;
+        IEnumerable<ItemDetail> itemsByFilter;
 
         public ObservableCollection<Item> CheckBoxItems { get; set; }
 
@@ -91,7 +91,7 @@ namespace DWPennyFinder.ViewModels
             {
                 if (Filter != string.Empty)
                 {
-                    FilterItemsByLocation(Filter);
+                    FilterItems(Filter);
                 }
                 else
                 {
@@ -222,12 +222,12 @@ namespace DWPennyFinder.ViewModels
             }
         }
        
-        public void FilterItemsByLocation(string location)
+        public void FilterItems(string filterSelected)
         {
 
-            Filter = location;
-            if(location == "Resorts") {
-                itemsByLocation = SourceItems.Where(itemDetail =>
+            Filter = filterSelected;
+            if(filterSelected == "Resorts") {
+                itemsByFilter = SourceItems.Where(itemDetail =>
                 !new List<string> {
                     "Disney Springs",
                     "Animal Kingdom",
@@ -236,21 +236,30 @@ namespace DWPennyFinder.ViewModels
                     "Hollywood Studios" }
                 .Contains(itemDetail.Location.name));
                 }
-            else if (location == "All")
+            else if (filterSelected == "Clear Filter")
                 {
-                    itemsByLocation = SourceItems;
+                itemsByFilter = SourceItems;
                 }
+            else if (filterSelected == "Collected")
+            {
+                itemsByFilter = SourceItems.Where(itemDetail => itemDetail.Item.Collected == true);
+
+            } else if (filterSelected == "Uncollected")
+            {
+
+                itemsByFilter = SourceItems.Where(itemDetail => itemDetail.Item.Collected == false);
+            }
             else
                 {
 
-                    itemsByLocation = SourceItems
+                itemsByFilter = SourceItems
                         .Where(itemDetail =>
-                        itemDetail.Location.name == location);
+                        itemDetail.Location.name == filterSelected);
                 }
             Items.Clear();
             foreach (var item in SourceItems)
             {
-                if (!itemsByLocation.Contains(item))
+                if (!itemsByFilter.Contains(item))
                 {
                     Items.Remove(item);   
                 }

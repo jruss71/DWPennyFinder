@@ -14,6 +14,7 @@ EasingOut="SinIn"
 HasBackgroundAnimation="True"/>
 </rg:PopupPage.Animation>
 <StackLayout Padding="0" VerticalOptions="EndAndExpand" HorizontalOptions="FillAndExpand">
+
 <Frame HasShadow="True" CornerRadius="20" HeightRequest="300">
 <StackLayout>
 <Grid MinimumHeightRequest="50" VerticalOptions="CenterAndExpand">
@@ -34,15 +35,16 @@ HasBackgroundAnimation="True"/>
 <ColumnDefinition Width="*"/>
 <ColumnDefinition Width="*"/>
 </Grid.ColumnDefinitions>
-<Button Text="Animal Kingdom" Clicked="OnAnimalKingdomClicked"/>
-<Button Text="Magic Kingdom" Clicked="OnMagicKingdomClicked" Grid.Column="1"/>
-<Button Text="Epcot" Clicked="OnEpcotClicked" Grid.Row="1"/>
-<Button Text="Hollywood Studios" Clicked="OnHollywoodStudiosClicked" Grid.Row="1" Grid.Column="1"/>
-<Button Text="Disney Springs" Clicked="OnDisneySpringsClicked" Grid.Row="2"/>
-<Button Text="Resorts" Clicked="OnResortsClicked" Grid.Row="2" Grid.Column="1"/>
-<Button Text="Clear Filter" Clicked="OnClearFilterClicked" Grid.Row="3" Grid.ColumnSpan="2" BackgroundColor="Gray" TextColor="White"/>
+<Button Text="Animal Kingdom" Clicked="OnFilterButtonClicked"/>
+<Button Text="Magic Kingdom" Clicked="OnFilterButtonClicked" Grid.Column="1"/>
+<Button Text="Epcot" Clicked="OnFilterButtonClicked" Grid.Row="1"/>
+<Button Text="Hollywood Studios" Clicked="OnFilterButtonClicked" Grid.Row="1" Grid.Column="1"/>
+<Button Text="Disney Springs" Clicked="OnFilterButtonClicked" Grid.Row="2"/>
+<Button Text="Resorts" Clicked="OnFilterButtonClicked" Grid.Row="2" Grid.Column="1"/>
+<Button Text="Collected" Clicked="OnFilterButtonClicked" Grid.Row="3"/>
+<Button Text="Uncollected" Clicked="OnFilterButtonClicked" Grid.Row="3" Grid.Column="1"/>
+<Button Text="Clear Filter" Clicked="OnFilterButtonClicked" Grid.Row="4" Grid.ColumnSpan="2" BackgroundColor="Gray" TextColor="White"/>
 </Grid>
-<Button Clicked="OnClose" Text="Close" TextColor="White"/>
 </StackLayout>
 </Frame>
 </StackLayout>

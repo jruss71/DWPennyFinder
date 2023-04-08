@@ -6,11 +6,12 @@
              xmlns:model="clr-namespace:DWPennyFinder.Models"  
              x:Name="BrowseItemsPage">
    
-    <ContentPage.ToolbarItems>
+    <ContentPage.ToolbarItems >
         <ToolbarItem Command="{Binding AddItemCommand}" IconImageSource="add.png" Priority="5" Order="Secondary"/>
         <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="2" Order="Secondary" />
         <ToolbarItem Command="{Binding SortItemCommand}" IconImageSource="sort.png" Priority="3" Order="Secondary" />
     </ContentPage.ToolbarItems>
+
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
