@@ -3,6 +3,8 @@ using Foundation;
 using MapKit;
 using System;
 using UIKit;
+using Xamarin.Forms.Maps;
+
 
 namespace DWPennyFinder.iOS
 {
@@ -22,9 +24,23 @@ namespace DWPennyFinder.iOS
 
         public int MachineID { get; set; }
 
-        public CustomMKAnnotationView(IMKAnnotation annotation, string id)
-            : base(annotation, id){
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
+        public Xamarin.Essentials.Location MachineLocation
+        {
+            get
+            {
+                return new Xamarin.Essentials.Location(Latitude, Longitude);
+            }
         }
-        
+
+
+
+        public CustomMKAnnotationView(IMKAnnotation annotation, string id)
+            : base(annotation, id)
+        {
+        }
+
     }
 }

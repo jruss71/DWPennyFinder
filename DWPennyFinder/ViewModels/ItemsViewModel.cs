@@ -16,11 +16,11 @@ namespace DWPennyFinder.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private ItemDetail  _selectedItem;
-        
+        private ItemDetail _selectedItem;
+
         private Collection<ItemDetail> SourceItems { get; }
         public ObservableCollection<ItemDetail> Items { get; }
-      
+
         public ICommand AddItemCommand { get; }
         public ICommand ItemTapped { get; }
         public ICommand ItemCollected { get; }
@@ -118,6 +118,11 @@ namespace DWPennyFinder.ViewModels
                     }
                 }
             };
+
+            //MessagingCenter.Subscribe<CheckBoxContentPage>(this, "RefreshNeeded", (sender) =>
+            //{
+            //    Console.WriteLine("Refresh Needed message received");
+            //});
         }
         public async Task ExecuteLoadItemsCommand()
         {
@@ -129,7 +134,7 @@ namespace DWPennyFinder.ViewModels
                 {
                     FilterItems(Filter);
                 }
-              
+
                 else
                 {
                     Items.Clear();
@@ -149,7 +154,7 @@ namespace DWPennyFinder.ViewModels
                         Items.Add(itemDetail);
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -158,7 +163,7 @@ namespace DWPennyFinder.ViewModels
             finally
             {
                 IsBusy = false;
-                
+
             }
         }
 
@@ -256,8 +261,6 @@ namespace DWPennyFinder.ViewModels
             await App.Database.SaveItemAsync(itemDetail.Item);
             OnPropertyChanged(nameof(Item.Collected));
 
-
-
         }
         async void OnItemSelected(ItemDetail item)
         {
@@ -280,12 +283,13 @@ namespace DWPennyFinder.ViewModels
                 CheckBoxItems.Add(item);
             }
         }
-       
+
         public void FilterItems(string filterSelected)
         {
 
             Filter = filterSelected;
-            if(filterSelected == "Resorts") {
+            if (filterSelected == "Resorts")
+            {
                 itemsByFilter = SourceItems.Where(itemDetail =>
                 !new List<string> {
                     "Disney Springs",
@@ -294,33 +298,34 @@ namespace DWPennyFinder.ViewModels
                     "Epcot",
                     "Hollywood Studios" }
                 .Contains(itemDetail.Location.name));
-                }
+            }
             else if (filterSelected == "Clear Filter")
-                {
+            {
                 itemsByFilter = SourceItems;
-                }
+            }
             else if (filterSelected == "Collected")
             {
                 itemsByFilter = SourceItems.Where(itemDetail => itemDetail.Item.Collected == true);
 
-            } else if (filterSelected == "Uncollected")
+            }
+            else if (filterSelected == "Uncollected")
             {
 
                 itemsByFilter = SourceItems.Where(itemDetail => itemDetail.Item.Collected == false);
             }
             else
-                {
+            {
 
                 itemsByFilter = SourceItems
                         .Where(itemDetail =>
                         itemDetail.Location.name == filterSelected);
-                }
+            }
             Items.Clear();
             foreach (var item in SourceItems)
             {
                 if (!itemsByFilter.Contains(item))
                 {
-                    Items.Remove(item);   
+                    Items.Remove(item);
                 }
                 else if (!Items.Contains(item))
                 {

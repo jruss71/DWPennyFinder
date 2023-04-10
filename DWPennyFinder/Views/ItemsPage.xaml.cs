@@ -27,11 +27,12 @@ namespace DWPennyFinder.Views
         public ItemsPage()
         {
             InitializeComponent();
+
             _viewModel = new ItemsViewModel();
             _viewModel.Navigation = Navigation;
             BindingContext = _viewModel;
             Resources.Add("LocationParkConverter", new LocationParkConverter());
-           // _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
+            // _viewModel.PropertyChanged += OnItemsViewModelPropertyChanged;
             FilterItemCommand = new Command<ItemDetail>(OnFilterItem);
             //LoadItems();
 
@@ -44,16 +45,6 @@ namespace DWPennyFinder.Views
             await PopupNavigation.Instance.PushAsync(filterPage);
         }
 
-
-
-        //private void OnItemsViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    if (e.PropertyName == "IsCollected")
-        //    {
-        //        Console.WriteLine("Need to refresh the view here");
-        //    }
-        //}
-
         protected async override void OnAppearing()
         {
             base.OnAppearing();
@@ -61,7 +52,10 @@ namespace DWPennyFinder.Views
             LoadItems();
         }
 
-    
+        public async void CallAppearing()
+        {
+            this.OnAppearing();
+        }
 
         private async Task LoadItems()
         {
@@ -75,10 +69,10 @@ namespace DWPennyFinder.Views
                 await _viewModel.ExecuteLoadItemsCommand();
             }
         }
-       
+
     }
 
-    
+
 }
 
 namespace DWPennyFinder.Converters

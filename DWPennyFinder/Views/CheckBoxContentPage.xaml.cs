@@ -21,7 +21,7 @@ namespace DWPennyFinder.Views
         {
             InitializeComponent();
             listView.ItemsSource = items;
-            
+
         }
         private void OnDismissButtonClicked(object sender, EventArgs e)
         {
@@ -46,6 +46,8 @@ namespace DWPennyFinder.Views
 
             // save the item to the database
             await App.Database.SaveItemAsync(item);
+
+            //MessagingCenter.Send<CheckBoxContentPage>(this, "RefreshNeeded");
         }
 
     }

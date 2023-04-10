@@ -32,10 +32,10 @@ namespace DWPennyFinder.Views
             //customMap.MapClicked += CustomMap_MapClicked;
         }
 
-       // private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
+        // private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
         //{
-            //checkboxList.IsVisible = false;
-       // }
+        //checkboxList.IsVisible = false;
+        // }
 
         private async Task LoadItems()
         {
@@ -60,10 +60,13 @@ namespace DWPennyFinder.Views
                     Label = string.Empty,
                     Machine = itemDetail.Machine.name,
                     Location = itemDetail.Location.name,
-                    MachineID = itemDetail.Machine.Id
+                    MachineID = itemDetail.Machine.Id,
+                    Latitude = itemDetail.Machine.latitude,
+                    Longitude = itemDetail.Machine.longitude
                 };
                 customMap.CustomPins = new List<CustomPin> { pin };
                 customMap.Pins.Add(pin);
+                customMap.mapPage = this;
                 var mapSpan = MapSpan.FromCenterAndRadius(pin.Position, Distance.FromMiles(0.5));
                 customMap.MoveToRegion(mapSpan);
 
@@ -105,6 +108,8 @@ namespace DWPennyFinder.Views
                                 Machine = previousItem.Machine.name,
                                 Location = previousItem.Location.name,
                                 MachineID = previousItem.Machine.Id,
+                                Latitude = previousItem.Machine.latitude,
+                                Longitude = previousItem.Machine.longitude,
                                 Label = string.Empty,
                                 Type = PinType.Place
 
@@ -125,15 +130,15 @@ namespace DWPennyFinder.Views
                         previousItem = itemDetail;
                     }
                 }
-
+                customMap.mapPage = this;
                 var latlongDegrees = 360 / (Math.Pow(2, defaultZoomLevel));
                 slider.Value = defaultZoomLevel;
-              
+
 
             }
         }
 
-        
+
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs e)
         {

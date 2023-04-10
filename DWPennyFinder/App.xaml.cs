@@ -9,6 +9,7 @@ using SQLite;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
+using System.Linq;
 
 namespace DWPennyFinder
 {
@@ -20,11 +21,11 @@ namespace DWPennyFinder
         {
             get
             {
-               
+
                 // Insert initial data into the database
                 Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
                 Stream dbStream = assembly.GetManifestResourceStream("DWPennyFinder.item.db3");
-                
+
 
                 if (dbStream == null)
                 {
@@ -32,16 +33,16 @@ namespace DWPennyFinder
                 }
 
                 if (!File.Exists(DatabasePath))
-                    {
-                    
+                {
+
                     FileStream fileStream = File.Create(DatabasePath);
-                        dbStream.Seek(0, SeekOrigin.Begin);
-                        dbStream.CopyTo(fileStream);
-                        dbStream.Close();
-                    }
-             
-                    database = new ItemDatabase(DatabasePath);
-                    return database;
+                    dbStream.Seek(0, SeekOrigin.Begin);
+                    dbStream.CopyTo(fileStream);
+                    dbStream.Close();
+                }
+
+                database = new ItemDatabase(DatabasePath);
+                return database;
 
             }
         }
@@ -54,28 +55,40 @@ namespace DWPennyFinder
             }
         }
 
-      
 
 
-        public App ()
+
+        public App()
         {
             InitializeComponent();
 
             MainPage = new NavigationPage(new AppShell());
         }
 
-        protected override void OnStart ()
+        protected override void OnStart()
         {
 
         }
-        
-        protected override void OnSleep ()
+
+        protected override void OnSleep()
         {
         }
 
-        protected override void OnResume ()
+        protected override void OnResume()
         {
+            base.OnResume();
+
+            // Get the current Page from the navigation stack
+            var currentPage = MainPage.Navigation.NavigationStack.LastOrDefault();
+
+            // Check if the current Page is the ItemsViewPage
+            if (currentPage is ItemsPage itemsPage)
+            {
+                // Call the OnAppearing method of the ItemsViewPage
+                itemsPage.CallAppearing();
+            }
         }
+
     }
 
 

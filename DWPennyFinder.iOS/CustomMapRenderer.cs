@@ -10,6 +10,8 @@ using Foundation;
 using MapKit;
 using Rg.Plugins.Popup.Services;
 using UIKit;
+using WebKit;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Maps.iOS;
@@ -47,7 +49,7 @@ namespace CustomRenderer.iOS
                 nativeMap.CalloutAccessoryControlTapped += OnCalloutAccessoryControlTapped;
                 nativeMap.DidSelectAnnotationView += OnDidSelectAnnotationView;
             }
-           
+
         }
 
         protected override MKAnnotationView GetViewForAnnotation(MKMapView mapView, IMKAnnotation annotation)
@@ -70,7 +72,7 @@ namespace CustomRenderer.iOS
                 annotationView = new CustomMKAnnotationView(annotation, customPin.Name);
                 annotationView.Image = UIImage.FromFile("pin.png");
                 annotationView.CalloutOffset = new CGPoint(0, 0);
-                string hexColor = "#886EB6"; 
+                string hexColor = "#886EB6";
                 UIColor uiColor = UIColor.FromRGB(
                     Convert.ToInt32(hexColor.Substring(1, 2), 16),
                     Convert.ToInt32(hexColor.Substring(3, 2), 16),
@@ -89,6 +91,15 @@ namespace CustomRenderer.iOS
                 ((CustomMKAnnotationView)annotationView).Location = customPin.Location;
                 ((CustomMKAnnotationView)annotationView).Machine = customPin.Machine;
                 ((CustomMKAnnotationView)annotationView).MachineID = customPin.MachineID;
+                ((CustomMKAnnotationView)annotationView).Latitude = customPin.Latitude;
+                ((CustomMKAnnotationView)annotationView).Longitude = customPin.Longitude;
+                //var leftAccessoryView = new UIImageView(UIImage.FromFile("navigator.png"));
+                //leftAccessoryView.UserInteractionEnabled = true; // Enable user interaction
+                //leftAccessoryView.AddGestureRecognizer(new UITapGestureRecognizer(() =>
+                //{
+                //    Console.WriteLine("Left accessory tapped");
+                //}));
+                //annotationView.LeftCalloutAccessoryView = leftAccessoryView;
             }
             annotationView.CanShowCallout = true;
             configureDetailView(annotationView);
@@ -108,7 +119,7 @@ namespace CustomRenderer.iOS
             var options = new MKMapSnapshotOptions();
             options.Size = new CGSize(width, height);
             options.MapType = MKMapType.SatelliteFlyover;
-          
+
 
             var snapshotter = new MKMapSnapshotter(options);
             snapshotter.Start((snapshot, error) =>
@@ -125,7 +136,7 @@ namespace CustomRenderer.iOS
                     label3.Text = ((CustomMKAnnotationView)annotationView).Name;
                     label3.LineBreakMode = UILineBreakMode.WordWrap;
                     label3.Lines = 0;
-                    
+
                     label.Frame = new CGRect(0, 0, 250, 20);
                     label2.Frame = new CGRect(0, 15, 250, 20);
                     label3.Frame = new CGRect(0, 25, 250, 70);
@@ -153,13 +164,44 @@ namespace CustomRenderer.iOS
         {
             CustomMKAnnotationView customView = e.View as CustomMKAnnotationView;
             ItemsViewModel viewModel = new ItemsViewModel();
-            if (!(customView.Machine == null))
+
+
+            var alertController = UIAlertController.Create("Choose an action", null, UIAlertControllerStyle.ActionSheet);
+
+            alertController.AddAction(UIAlertAction.Create("Check List", UIAlertActionStyle.Default, async (action) =>
             {
                 await viewModel.CheckBoxItemsForMachine(customView.MachineID);
                 var page = new CheckBoxContentPage(viewModel.CheckBoxItems);
                 await PopupNavigation.Instance.PushAsync(page);
+            }));
 
+            alertController.AddAction(UIAlertAction.Create("Get walking directions", UIAlertActionStyle.Default, (action) =>
+            {
+                var options = new MapLaunchOptions
+                {
+                    NavigationMode = NavigationMode.Walking
+                };
+                // Set a mock location for testing purposes
+
+                //App.Device.SetLocation(37.785834, -122.406417);
+
+                Xamarin.Essentials.Map.OpenAsync(customView.MachineLocation, options);
+
+            }));
+            //var viewController = formsMap.mapPage;
+            // Get the current view controller
+
+            // Present the alert controller from the current view controller
+
+            alertController.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+            var window = UIApplication.SharedApplication.KeyWindow;
+            var vc = window.RootViewController;
+            while (vc.PresentedViewController != null)
+            {
+                vc = vc.PresentedViewController;
             }
+
+            vc.PresentViewController(alertController, true, null);
         }
 
         void OnDidSelectAnnotationView(object sender, MKAnnotationViewEventArgs e)

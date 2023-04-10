@@ -9,5 +9,14 @@ namespace DWPennyFinder
         public string Machine { get; set; }
         public string Location { get; set; }
         public int MachineID { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public Position pinPosition
+        {
+            get
+            {
+                return new Position(Latitude, Longitude);
+            }
+        }
     }
 }

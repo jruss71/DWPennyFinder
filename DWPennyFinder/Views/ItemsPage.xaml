@@ -7,9 +7,9 @@
              x:Name="BrowseItemsPage">
    
     <ContentPage.ToolbarItems >
-        <ToolbarItem Command="{Binding AddItemCommand}" IconImageSource="add.png" Priority="5" Order="Primary"/>
-        <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="2" Order="Primary" />
+        <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="2" Order= "Primary" />
     </ContentPage.ToolbarItems>
+    
 
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
@@ -68,8 +68,6 @@
 
                             <Image Grid.Column="1" Source="mouse_30x30.png" IsVisible="{Binding Item.Collected}" />
                         </Grid>
-                        
-                        
                         <ContentView.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
