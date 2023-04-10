@@ -7,7 +7,7 @@
              x:Name="BrowseItemsPage">
    
     <ContentPage.ToolbarItems >
-        <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="2" Order= "Primary" />
+        <ToolbarItem Command="{Binding AltFilterCommand}" IconImageSource ="filter.png" Priority="1" Order= "Primary" />
     </ContentPage.ToolbarItems>
     
 

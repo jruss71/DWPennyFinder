@@ -32,11 +32,6 @@ namespace DWPennyFinder.Views
             //customMap.MapClicked += CustomMap_MapClicked;
         }
 
-        // private void CustomMap_MapClicked(object sender, MapClickedEventArgs e)
-        //{
-        //checkboxList.IsVisible = false;
-        // }
-
         private async Task LoadItems()
         {
             await _viewModel.ExecuteLoadItemsCommand();
@@ -56,7 +51,8 @@ namespace DWPennyFinder.Views
                 var pin = new CustomPin
                 {
                     Position = itemDetail.Machine.pinPosition, //pinPosition,
-                    Name = itemDetail.Item.Name,
+                    //Name = itemDetail.Item.Name,
+                    Name = await itemDetail.GetOtherPenniesAtLocation(),
                     Label = string.Empty,
                     Machine = itemDetail.Machine.name,
                     Location = itemDetail.Location.name,

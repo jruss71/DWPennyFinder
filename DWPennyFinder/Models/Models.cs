@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using SQLite;
 using Xamarin.Forms.Maps;
 
@@ -82,6 +84,26 @@ namespace DWPennyFinder.Models
             // Raise the PropertyChanged event for the ItemDetail object
             // when a property value in the associated Item object changes
             OnPropertyChanged(nameof(Item));
+        }
+
+        // This method returns a "formatted string" that includes newline character
+        // between each Penny found at a location for display in our Map Annotation
+        public async Task<String> GetOtherPenniesAtLocation()
+        {
+            var items = await App.Database.GetItemsByMachineAsync(Machine.Id);
+            StringBuilder pennies = new StringBuilder();
+
+            foreach (var item in items)
+            {
+                if (pennies.Length != 0)
+                {
+                    pennies.Append("\n");
+                }
+                pennies.Append(item.Name);
+
+            }
+
+            return pennies.ToString();
         }
     }
 

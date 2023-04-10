@@ -270,6 +270,7 @@ namespace DWPennyFinder.ViewModels
 
             var mapPage = new MapPage();
             mapPage.BindingContext = item;
+            //mapPage.BindingContext = this;
             await Navigation.PushAsync(mapPage);
 
         }

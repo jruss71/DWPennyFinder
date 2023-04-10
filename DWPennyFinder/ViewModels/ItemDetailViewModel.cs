@@ -15,6 +15,7 @@ namespace DWPennyFinder.ViewModels
         private string park;
         private double latitude;
         private double longitude;
+
         public string Id { get; set; }
 
         public string Name
@@ -55,9 +56,9 @@ namespace DWPennyFinder.ViewModels
             {
                 itemId = value;
             }
-        }        
+        }
 
-        
+
     }
 }
 
